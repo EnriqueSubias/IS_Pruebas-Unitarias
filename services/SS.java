@@ -1,13 +1,17 @@
 package services;
 
+import java.net.ConnectException;
+
+import data.Nif;
+
 /**
  * External services involved in procedures from population
  */
 
 public interface SS { // External service for Social Security Govern administration
 
-    // LaboralLifeDoc getLaboralLife(Nif nif) throws NotAffiliatedException, ConnectException; // 4, 5
+    LaboralLifeDoc getLaboralLife(Nif nif) throws NotAffiliatedException, ConnectException;
 
-    //MemberAccreditationDoc getMembAccred(Nif nif) throws NotAffiliatedException, ConnectException; // 6
-    
+    MemberAccreditationDoc getMembAccred(Nif nif) throws NotAffiliatedException, ConnectException;
+
 }

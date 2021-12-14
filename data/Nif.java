@@ -36,4 +36,8 @@ final public class Nif {
     public String toString() {
         return "Nif{" + "nif ciudadano='" + nif + '\'' + '}';
     }
+
+    // podemos definir las dos situaciones siguientes: TODO
+        // - que al constructor le llegue null (objeto sin instanciar),
+        // - y también un nif mal formado.
 }
