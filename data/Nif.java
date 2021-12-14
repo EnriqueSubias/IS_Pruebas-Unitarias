@@ -4,7 +4,7 @@ package data;
  * Essential data classes
  */
 
-final public class Nif {
+public final class Nif {
 
     // The tax identification number in the Spanish state.
     private final String nif;
@@ -38,6 +38,6 @@ final public class Nif {
     }
 
     // podemos definir las dos situaciones siguientes: TODO
-        // - que al constructor le llegue null (objeto sin instanciar),
-        // - y también un nif mal formado.
+    // - que al constructor le llegue null (objeto sin instanciar),
+    // - y también un nif mal formado.
 }
