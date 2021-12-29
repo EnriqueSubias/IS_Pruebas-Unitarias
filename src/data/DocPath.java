@@ -1,4 +1,4 @@
-package data;
+package src.data;
 
 /**
  * Essential data classes
@@ -39,13 +39,13 @@ public final class DocPath {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        DocPath DocPathh = (DocPath) o;
+        DocPath docPathh = (DocPath) o;
         /*if (this.path.compareTo(DocPathh.getPath()) == 0){
             return true;
         }else{
             return false;
         }*/
-        return this.path.equals(DocPathh.getPath());
+        return this.path.equals(docPathh.getPath());
     }
 
     @Override

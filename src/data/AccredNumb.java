@@ -1,4 +1,4 @@
-package data;
+package src.data;
 
 /**
  * Essential data classes
@@ -6,11 +6,12 @@ package data;
 
 public final class AccredNumb {
     // Number of affiliation to the Social Security.
-    private final String ssNumber; // 11 digits length
+    // hemos quitado final de ssNumber
+    private String ssNumber; // 11 digits length 
     public AccredNumb(){
         this.ssNumber = null;
     }
-    public void AddAccredNumb(String code) throws IllegalArgumentException {
+    public void addAccredNumb(String code) throws IllegalArgumentException {
         if (code.length() != 11) {
             // Checks if the number has length 11 if not throws an exception
             throw new IllegalArgumentException("Invalid AccredNumb length");
