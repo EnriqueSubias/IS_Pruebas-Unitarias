@@ -1,29 +1,57 @@
 package data;
+
 /**
  * Essential data classes
  */
-final public class AccredNumb {
+
+public final class AccredNumb {
     // Number of affiliation to the Social Security.
-    private final String ss_number;//11 digits length
-    public AccredNumb(String ss_number) throws IllegalArgumentException{
-        if(ss_number.length() != 11){
+    private final String ssNumber; // 11 digits length
+    public AccredNumb(){
+        this.ssNumber = null;
+    }
+    public void AddAccredNumb(String code) throws IllegalArgumentException {
+        if (code.length() != 11) {
             // Checks if the number has length 11 if not throws an exception
-            throw new IllegalArgumentException("Incorrect format");
+            throw new IllegalArgumentException("Invalid AccredNumb length");
+        } else {
+            boolean correctFormat = true;
+            for (int i = 0; i < code.length(); i++) {
+                if (!Character.isDigit(code.charAt(i))) {
+                    i = code.length();
+                    correctFormat = false;
+                }
+            }
+            if (correctFormat) {
+                this.ssNumber = code;
+            } else {
+                throw new IllegalArgumentException("Invalid AccredNumb format");
+            }
         }
-        this.ss_number= ss_number;
+
     }
-    public String getAccredNumber () {
-        return ss_number;
+
+    public String getAccredNumber() {
+        return ssNumber;
     }
+
     @Override
-    public boolean equals (Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false; AccredNumb accredNumb = (AccredNumb) o;
-        return ss_number.equals(accredNumb.ss_number);
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        AccredNumb accredNumb = (AccredNumb) o;
+        return ssNumber.equals(accredNumb.ssNumber);
     }
+
     @Override
-    public int hashCode () { return ss_number.hashCode(); }
+    public int hashCode() {
+        return ssNumber.hashCode();
+    }
+
     @Override
-    public String toString () {
-        return "AccredNumb{" + "Numero de SS del ciudadano='" + ss_number + '\'' + '}';
-    } }
+    public String toString() {
+        return "AccredNumb{" + "Numero de SS del ciudadano='" + ssNumber + '\'' + '}';
+    }
+}

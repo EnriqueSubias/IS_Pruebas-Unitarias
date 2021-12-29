@@ -1,34 +1,55 @@
 package data;
+
 /**
  * Essential data classes
  */
-final public class DocPath {
+public final class DocPath {
     // Document Path Class.
-    private final String path;
-    private final AccredNumb numberSS;
-    public DocPath(String path, AccredNumb numberSS) throws NullPointerException{
-        if(path == null || numberSS == null){
+    private String path;
+
+    public DocPath(){
+        this.path = null;
+    }
+
+    // private final AccredNumb numberSS;
+    public void addDocPath(String path, AccredNumb numberSS) throws NullPointerException {
+        if (path == null) {
             throw new NullPointerException("path or numberSS entered as null Parameter");
         }
-        this.numberSS=numberSS;
+        // this.numberSS=numberSS;
         this.path = path;
     }
-    public String getPath () {
+
+    public String getPath() {
         return path;
     }
-    public String getNumberSS(){
-        return numberSS.getAccredNumber();
+    /*
+     * public String getNumberSS(){
+     * return numberSS.getAccredNumber();
+     * }
+     */
+
+    @Override
+    public int hashCode () { return (this.path.hashCode());}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        DocPath DocPathh = (DocPath) o;
+        /*if (this.path.compareTo(DocPathh.getPath()) == 0){
+            return true;
+        }else{
+            return false;
+        }*/
+        return this.path.equals(DocPathh.getPath());
     }
+
     @Override
-    public int hashCode () { return (path+numberSS.toString()).hashCode();}
-    @Override
-    public boolean equals (Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false; DocPath docPath = (DocPath) o;
-        return (path+numberSS.toString()).equals(docPath.path+docPath.numberSS.toString());
-    }
-    @Override
-    public String toString () {
-        return "DocPath{" + "Doc Path='" + path + "Number SS:" + numberSS + '\'' + '}';
+    public String toString() {
+        return "DocPath{" + "Doc Path='" + '\'' + '}';
     }
 }
