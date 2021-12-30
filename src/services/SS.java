@@ -3,6 +3,7 @@ package src.services;
 import java.net.ConnectException;
 
 import src.data.Nif;
+import src.exceptions.NotAffiliatedException;
 
 /**
  * External services involved in procedures from population
