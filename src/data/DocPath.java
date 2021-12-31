@@ -1,7 +1,5 @@
 package src.data;
 
-//import java.nio.file.Path;
-
 /**
  * Essential data classes
  */
@@ -9,7 +7,7 @@ public final class DocPath {
     // Document Path Class.
     private String path;
 
-    public DocPath(){
+    public DocPath() {
         this.path = null;
     }
 
@@ -27,7 +25,9 @@ public final class DocPath {
     }
 
     @Override
-    public int hashCode () { return (this.path.hashCode());}
+    public int hashCode() {
+        return (this.path.hashCode());
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -37,11 +37,13 @@ public final class DocPath {
             return false;
         }
         DocPath docPathh = (DocPath) o;
-        /*if (this.path.compareTo(DocPathh.getPath()) == 0){
-            return true;
-        }else{
-            return false;
-        }*/
+        /*
+         * if (this.path.compareTo(DocPathh.getPath()) == 0){
+         * return true;
+         * }else{
+         * return false;
+         * }
+         */
         return this.path.equals(docPathh.getPath());
     }
 

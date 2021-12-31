@@ -59,6 +59,4 @@ public class TestData {
         assertEquals(pin, this.pinCode.getPin());
     }
 
-    
-
 }

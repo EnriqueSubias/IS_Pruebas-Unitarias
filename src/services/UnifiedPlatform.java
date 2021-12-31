@@ -6,6 +6,7 @@ import src.data.Nif;
 import src.data.PINcode;
 import src.data.DocPath;
 import src.exceptions.*;
+
 import java.util.Date;
 
 public class UnifiedPlatform {
@@ -13,8 +14,8 @@ public class UnifiedPlatform {
     // The class members
     // boolean casillaSS = true;
     // Input events
-    String tramites[] = { "vida laboral", "numero seguridad social" };
-    String instituciones[] = { "SS", "AEAT", "DGT", "MJ" };
+    String[] tramites = { "vida laboral", "numero seguridad social" };
+    String[] instituciones = { "SS", "AEAT", "DGT", "MJ" };
 
     String institution;
     String personType;
@@ -82,13 +83,12 @@ public class UnifiedPlatform {
     }
 
     public void selectCertificationReport(byte opc) {
-        // evento que emula la acción de seleccionar el
-        // informe o certificado concreto que se desea obtener, tras presentar un menú con las
-        // dos opciones disponibles. Utilizaremos un byte para indicar de qué informe se trata.
+        // evento que emula la acción de seleccionar el informe o certificado concreto
+        // que se desea obtener, tras presentar un menú con las dos opciones
+        // disponibles. Utilizaremos un byte para indicar de qué informe se trata.
         if (institution != null && personType != null && personType.compareTo("Ciudadanos") == 0) {
             // tramites[opc];
-            
-            
+
         }
         selectAuthMethod(opc);
     }
@@ -106,6 +106,7 @@ public class UnifiedPlatform {
     }
 
     private void printDocument() throws BadPathException, PrintingException {
+
     }
 
     private void downloadDocument() {

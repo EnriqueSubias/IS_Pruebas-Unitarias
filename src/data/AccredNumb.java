@@ -19,8 +19,8 @@ public final class AccredNumb {
             boolean correctFormat = true;
             for (int i = 0; i < code.length(); i++) {
                 if (!Character.isDigit(code.charAt(i))) {
-                    i = code.length();
                     correctFormat = false;
+                    break;
                 }
             }
             if (correctFormat) {
