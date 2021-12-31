@@ -29,9 +29,9 @@ public class QuotePeriodsColl { // Represents the total quote periods known as a
         return specific;
     }
 
-    public boolean addQuotePeriod(QuotePeriod qPd) throws AlreadyAddedException { // Adds a quote period, always
-                                                                                  // respecting the sorting by date,
-                                                                                  // from oldest to later in time
+    public boolean addQuotePeriod(QuotePeriod qPd) throws AlreadyAddedException {
+        // Adds a quote period, always respecting the sorting by date, from oldest to
+        // later in time
         if (qPd == null) {
             throw new NoSuchElementException("qPd element is null");
         } else if (cola.containsKey(qPd.getInitDay())) { // Duplicated

@@ -2,10 +2,7 @@ package src.services;
 
 import java.io.File;
 import java.io.IOException;
-//import java.nio.file.FileSystem;
-//import java.nio.file.FileSystems;
 import java.nio.file.Files;
-//import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.awt.Desktop;
@@ -18,9 +15,9 @@ public class PDFDocument { // Represents a PDF document
     public File file;
 
     public PDFDocument() { // Initializes attributes and emulates the document download at a default path
-        // this.createDate = createDate;
-        // this.path = path;
-        // this.file = file;
+        // this.createDate = createDate
+        // this.path = path
+        // this.file = file
     }
 
     // the getters
@@ -37,7 +34,8 @@ public class PDFDocument { // Represents a PDF document
     }
 
     public String toString() { // Converts to String members Date and DocPath
-        return "fecha de creacion: " + this.creatDate + " ruta del archvio: " + this.path; // To implement only optionally
+        return "fecha de creacion: " + this.creatDate + " ruta del archvio: " + this.path;
+        // To implement only optionally
     }
 
     public void moveDoc(DocPath destPath) throws IOException { // Moves the document to the destination path indicated

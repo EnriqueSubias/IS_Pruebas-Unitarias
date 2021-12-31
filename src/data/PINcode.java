@@ -18,7 +18,6 @@ public final class PINcode {
             boolean correctFormat = true;
             for (int i = 0; i < code.length(); i += 1) {
                 if (!Character.isDigit(code.charAt(i))) {
-                    //i = code.length();
                     correctFormat = false;
                     break;
                 }
@@ -29,11 +28,13 @@ public final class PINcode {
                 throw new IllegalArgumentException("Invalid PIN format");
             }
             // Se usaba esto porque code era int, ahora es String
-            // if (code > 999 || code < 0) {
-            // // Wrong entered data.
-            // throw new IllegalArgumentException("Ilegal Number (Should be positive and
-            // lower than 999 ");
-            // }
+            /*
+             * if (code > 999 || code < 0) {
+             * Wrong entered data.
+             * throw new IllegalArgumentException("Ilegal Number (Should be positive and
+             * lower than 999 ");
+             * }
+             */
         }
         // this.pin = code;
     }

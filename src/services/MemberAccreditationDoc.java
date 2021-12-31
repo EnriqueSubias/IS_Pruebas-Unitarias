@@ -10,7 +10,8 @@ public class MemberAccreditationDoc extends PDFDocument { // Represents the memb
 
     public MemberAccreditationDoc(Nif nif, AccredNumb nAff) { // Initializes attributes
         this.nif = nif;
-        this.numAffil = nAff; // TODO: intentar implementear el deep copy;
+        this.numAffil = nAff;
+        // TODO intentar implementear el deep copy
     }
 
     // the getters

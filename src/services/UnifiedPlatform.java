@@ -12,8 +12,9 @@ import java.util.Date;
 public class UnifiedPlatform {
 
     // The class members
-    // boolean casillaSS = true;
+
     // Input events
+
     String[] tramites = { "vida laboral", "numero seguridad social" };
     String[] instituciones = { "SS", "AEAT", "DGT", "MJ" };
 
@@ -26,12 +27,13 @@ public class UnifiedPlatform {
         // clicar en el buscador para desplegar el campo de texto en el que introducir
         // la o las palabras clave.
         System.out.println("Introduce el tramite a buscar: ");
-        Scanner sc = new Scanner(System.in); // Se crea el lector
-        String keyWord = sc.nextLine();
-        try {
-            enterKeyWords(keyWord);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        try (Scanner sc = new Scanner(System.in)) {
+            String keyWord = sc.nextLine();
+            try {
+                enterKeyWords(keyWord);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -87,32 +89,35 @@ public class UnifiedPlatform {
         // que se desea obtener, tras presentar un menú con las dos opciones
         // disponibles. Utilizaremos un byte para indicar de qué informe se trata.
         if (institution != null && personType != null && personType.compareTo("Ciudadanos") == 0) {
-            // tramites[opc];
+            // TODO tramites[opc]
 
         }
         selectAuthMethod(opc);
     }
 
     public void selectAuthMethod(byte opc) {
-
+        // TODO
     }
 
     public void enterNIF_PINobt(Nif nif, Date valDate) throws NifNotRegisteredException, IncorrectValDateException,
             AnyMobileRegisteredException, ConnectException {
-
+        // TODO
     }
 
     public void enterPIN(PINcode pin) throws NotValidPINException, NotAffiliatedException, ConnectException {
+        // TODO
     }
 
     private void printDocument() throws BadPathException, PrintingException {
-
+        // TODO
     }
 
     private void downloadDocument() {
+        // TODO
     }
 
     private void selectPath(DocPath path) throws BadPathException {
+        // TODO
     }
 
     // Other operations
@@ -121,13 +126,17 @@ public class UnifiedPlatform {
     }
 
     private void OpenDocument(DocPath path) throws BadPathException {
+        // TODO
     }
 
     private void printDocument(DocPath path) throws BadPathException, PrintingException {
+        // TODO
     }
 
     private void downloadDocument(DocPath path) throws BadPathException {
+        // TODO
     }
+
     // Possibly more operations
 }
 
