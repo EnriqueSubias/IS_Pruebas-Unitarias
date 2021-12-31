@@ -2,16 +2,20 @@ package test.data;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import src.data.AccredNumb;
 import src.data.DocPath;
-
+import src.data.Nif;
+import src.data.Password;
+import src.data.PINcode;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestData {
 
     DocPath docPath;
     AccredNumb accredNumb;
+    Nif nif;
+    Password pass;
+    PINcode pinCode;
 
     @BeforeEach
     public void setUp() {
@@ -27,10 +31,34 @@ public class TestData {
     }
 
     @Test
-    public void addAccredNumbTest() throws IllegalArgumentException {
+    public void addValidAccredNumbTest() throws IllegalArgumentException {
         String code = "75634816211";
         accredNumb.addAccredNumb(code);
         assertEquals(code, accredNumb.getAccredNumber());
     }
+
+    // data
+    @Test
+    public void addValidNifTest() throws NullPointerException, IllegalArgumentException {
+        String nifNumb = "12345678A";
+        this.nif = new Nif(nifNumb);
+        assertEquals(nifNumb, this.nif.getNif());
+    }
+
+    @Test
+    public void addValidPasswordTest() throws NullPointerException {
+        String password = "Holas123";
+        this.pass = new Password(password);
+        assertEquals(password, this.pass.getPassword());
+    }
+
+    @Test
+    public void addValidPinCodeTest() throws IllegalArgumentException, NullPointerException {
+        String pin = "123";
+        this.pinCode = new PINcode(pin);
+        assertEquals(pin, this.pinCode.getPin());
+    }
+
+    
 
 }

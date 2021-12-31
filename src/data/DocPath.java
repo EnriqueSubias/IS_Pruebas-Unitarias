@@ -25,11 +25,6 @@ public final class DocPath {
     public String getPath() {
         return path;
     }
-    /*
-     * public String getNumberSS(){
-     * return numberSS.getAccredNumber();
-     * }
-     */
 
     @Override
     public int hashCode () { return (this.path.hashCode());}

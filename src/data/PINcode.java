@@ -18,8 +18,9 @@ public final class PINcode {
             boolean correctFormat = true;
             for (int i = 0; i < code.length(); i += 1) {
                 if (!Character.isDigit(code.charAt(i))) {
-                    i = code.length();
+                    //i = code.length();
                     correctFormat = false;
+                    break;
                 }
             }
             if (correctFormat) {
