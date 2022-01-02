@@ -10,12 +10,12 @@ public interface CertificationAuthority { // External service that represents th
         
         boolean sendPIN(Nif nif, Date vaID)
                         throws NifNotRegisteredException, IncorrectValDateException, AnyMobileRegisteredException,
-                        ConnectException;
+                        ConnectException ;
 
         // compartida
-        public boolean checkPIN(Nif nif, PINcode pin) throws NotValidPINException, ConnectException;
+        boolean checkPIN(Nif nif, PINcode pin) throws NotValidPINException, ConnectException;
 
-        public boolean ckeckCredent(Nif nif, Password passw)
+       byte ckeckCredent(Nif nif, Password passw)
                         throws NifNotRegisteredException, NotValidCredException, AnyMobileRegisteredException,
                         ConnectException;
 

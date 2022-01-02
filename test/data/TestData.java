@@ -1,16 +1,28 @@
 package test.data;
 
 import java.util.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Validate;
+
 import src.data.AccredNumb;
 import src.data.DocPath;
 import src.data.Nif;
 import src.data.Password;
 import src.data.PINcode;
-import src.services.*;
+
+import src.exceptions.*;
+import src.publicadministration.*;
+import src.services.CertificationAuthority;
+import src.services.UnifiedPlatform;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Scanner;
+import java.util.function.BooleanSupplier;
 
 public class TestData {
 
@@ -63,14 +75,25 @@ public class TestData {
     }
 
     @Test
-    public void dateValidTest() {
-        Date futuretDate = new Date();
-        LocalDate.from(futuretDate.toInstant().plusDays(7))
+    public void dateValidTest() throws IncorrectValDateException {
+        Date futureDate = new Date(2022/12/16);
+        // LocalDate.from(futuretDate.toInstant().plusSeconds((long) 36000 * 7));
         assertTrue(UnifiedPlatform.dateValid(futureDate));
 
-        //Date pastDate = new Date();
-        //LocalDate.from(pastDate.toInstant().plusDays(7))
-        //assertFalse(dateValid(pastDate));
+        // Date pastDate = new Date();
+        // LocalDate.from(pastDate.toInstant().plusDays(7))
+        // assertFalse(dateValid(pastDate));
 
     }
+
+    // @Test
+    // public void sendPinTest() throws NifNotRegisteredException,
+    // IncorrectValDateException, AnyMobileRegisteredException, ConnectException {
+    // Nif nifNumber = new Nif("12345678A");
+    // Date valDate = new Date(14 / 02 / 2022);
+    // // PINcode pinCodeTest = new enterNIFPINobt(nifNumber, valDate);
+
+    // // UnifiedPlatform.enterNIFPINobt(nifNumber, valDate);
+    // }
+
 }

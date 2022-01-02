@@ -12,6 +12,10 @@ import src.exceptions.*;
 import src.publicadministration.*;
 import src.services.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -30,9 +34,10 @@ public class UnifiedPlatform implements CertificationAuthority {
     String personType;
     String report;
     String certReport;
-    String Authentication;
+    String authentication;
     Nif nifdoc;
     PINcode pindoc;
+    PINcode pinSMS;
 
     public void processSearcher() {
         // se procede a utilizar el buscador de trámites. Este evento emula la acción de
@@ -105,17 +110,24 @@ public class UnifiedPlatform implements CertificationAuthority {
         // que se desea obtener, tras presentar un menú con las dos opciones
         // disponibles. Utilizaremos un byte para indicar de qué informe se trata.
         if (institution != null && personType != null && personType.compareTo("persona física") == 0) {
-            if (opc == 1) {
-                // Get Loboral LifeDoc
+            // if (opc == 0 ) {
+            // // Get Loboral LifeDoc
+            // certReport = autMethod[opc];
+            // selectAuthMethod(opc);
+            // } else if (opc == 1) {
+            // // Get Numero SS
+            // certReport = autMethod[opc];
+            // selectAuthMethod(opc);
+            // }
+            try {
                 certReport = autMethod[opc];
-                selectAuthMethod(opc);
-            } else if (opc == 2) {
-                // Get Numero SS
-                certReport = autMethod[opc];
+            } finally {
                 selectAuthMethod(opc);
             }
+
             // No se ha selecionado una opcion valida
         }
+
     }
 
     public void selectAuthMethod(byte opc) {
@@ -124,41 +136,46 @@ public class UnifiedPlatform implements CertificationAuthority {
                 && certReport != null) {
             if (opc == 1) {
                 // Cl@ve PIN
-                Authentication = tramites[opc];
+                authentication = tramites[opc];
                 System.out.println("Cl@ve PIN Seleccionada");
             } else if (opc == 2) {
                 // certificado digital
-                Authentication = tramites[opc];
+                authentication = tramites[opc];
                 System.out.println("certificado digital Seleccionado");
             }
             // No se ha selecionado una opcion valida
         }
     }
 
-    public void enterNIF_PINobt(Nif nif, Date valDate) throws NifNotRegisteredException,
-            AnyMobileRegisteredException, ConnectException {
+    public void enterNIFPINobt(Nif nif, Date valDate) throws NifNotRegisteredException,
+            AnyMobileRegisteredException, ConnectException, NullPointerException, IllegalArgumentException,
+            IncorrectValDateException {
         // transmetre les dades del ciutadà que l’acrediten en Cl@ve PIN,
         // i sol·licitud del PIN per a la realització d’un tràmit,
         // via connexió amb l’autoritat de certificació responsable
         if (institution != null && personType != null && personType.compareTo("persona física") == 0
-                && certReport != null && Authentication == "Cl@ve PIN") {
+                && certReport != null && authentication.equals("Cl@ve PIN")) { // Preconditions
             if (dateValid(valDate)) {
                 Nif nifdoc = new Nif(nif.getNif());
-
-                // if (CertificationAutohrity sendPIN(nifdoc,valDate))
-
-                //sendPIN(nifdoc, valDate);
-                //send
+                if (sendPIN(nifdoc, valDate)) {
+                    System.out.println("PIN enviado por SMS");
+                }
             }
         }
     }
 
-    public boolean dateValid(Date valDate) throws IncorrectValDateException {
-        if (valDate.before(Calendar.getInstance().getTime())) {
-            // if (valDate.before(java.time.LocalDate.now())) {
+    public static boolean dateValid(Date valDate) throws IncorrectValDateException {
+        // if (valDate.before(Calendar.getInstance().getTime())) {
+        // if (valDate.before(LocalDate.now())) {
+        // if (valDate < hoy) {
+        LocalDate valD = Instant.ofEpochMilli(valDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate today = LocalDate.now();
+        //if (LocalDate(valD).isBefore(LocalDate.now())) {
+        if (valD.compareTo(today) > 0) {
             throw new IncorrectValDateException();
+        } else {
+            return true;
         }
-        return true;
     }
 
     public void enterPIN(PINcode pin) throws NotValidPINException, NotAffiliatedException, ConnectException {
@@ -201,10 +218,14 @@ public class UnifiedPlatform implements CertificationAuthority {
     }
 
     @Override
-    public boolean sendPIN(Nif nif, Date vaID) throws NifNotRegisteredException, IncorrectValDateException,
-            AnyMobileRegisteredException, ConnectException {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean sendPIN(Nif nif, Date vaID) { // throws NifNotRegisteredException, IncorrectValDateException,
+        // AnyMobileRegisteredException, ConnectException {
+        try {
+            pinSMS = new PINcode("842");
+        } finally {
+            System.out.println("SMS enviado correctamente");
+        }
+        return true;
     }
 
     @Override
@@ -214,10 +235,10 @@ public class UnifiedPlatform implements CertificationAuthority {
     }
 
     @Override
-    public boolean ckeckCredent(Nif nif, Password passw)
+    public byte ckeckCredent(Nif nif, Password passw)
             throws NifNotRegisteredException, NotValidCredException, AnyMobileRegisteredException, ConnectException {
         // TODO Auto-generated method stub
-        return false;
+        return 0;
     }
 
     // Possibly more operations
