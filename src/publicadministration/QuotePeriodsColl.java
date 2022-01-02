@@ -6,7 +6,7 @@ import src.exceptions.AlreadyAddedException;
 
 public class QuotePeriodsColl { // Represents the total quote periods known as a registered worker
 
-    // ??? Its components, that is, the set of quote periods
+    // Its components, that is, the set of quote periods
     private HashMap<Date, QuotePeriod> cola;
 
     public QuotePeriodsColl() { // Initializes the object

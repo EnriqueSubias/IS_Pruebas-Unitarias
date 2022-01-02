@@ -7,6 +7,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.awt.Desktop;
 import src.data.DocPath;
+import src.exceptions.BadPathException;
 
 public class PDFDocument { // Represents a PDF document
 
@@ -33,29 +34,30 @@ public class PDFDocument { // Represents a PDF document
         return this.file;
     }
 
+    @Override
     public String toString() { // Converts to String members Date and DocPath
         return "fecha de creacion: " + this.creatDate + " ruta del archvio: " + this.path;
         // To implement only optionally
     }
 
-    public void moveDoc(DocPath destPath) throws IOException { // Moves the document to the destination path indicated
+    public void moveDoc(DocPath destPath) throws BadPathException { // Moves the document to the destination path indicated
         File from = new File(this.file.getPath());
         File to = new File(destPath.getPath());
         try {
             Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
             System.out.println("File moved successfully.");
         } catch (IOException ex) {
-            ex.printStackTrace();
+            throw new BadPathException();
         }
         this.path = destPath;
     }
 
-    public void openDoc(DocPath path) throws IOException { // Opens the document at the path indicated
+    public void openDoc(DocPath path) throws BadPathException { // Opens the document at the path indicated
         try {
             File filePath = new File(path.getPath());
             Desktop.getDesktop().open(filePath);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            throw new BadPathException();
         }
     }
 

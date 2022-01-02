@@ -31,11 +31,13 @@ public class TestData {
     Nif nif;
     Password pass;
     PINcode pinCode;
+    UnifiedPlatform uni;
 
     @BeforeEach
     public void setUp() {
         this.docPath = new DocPath();
         this.accredNumb = new AccredNumb();
+        this.uni = new UnifiedPlatform();
     }
 
     @Test
@@ -76,15 +78,29 @@ public class TestData {
 
     @Test
     public void dateValidTest() throws IncorrectValDateException {
-        Date futureDate = new Date(2022/12/16);
-        // LocalDate.from(futuretDate.toInstant().plusSeconds((long) 36000 * 7));
-        assertTrue(UnifiedPlatform.dateValid(futureDate));
+        Date pastDate = Date.from((new java.util.Date()).toInstant().minusSeconds(1576800000));
+        Exception exception = assertThrows(IncorrectValDateException.class, () -> uni.dateValid(pastDate));
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains("NIF and date do not correspond with the citizen"));
 
-        // Date pastDate = new Date();
-        // LocalDate.from(pastDate.toInstant().plusDays(7))
-        // assertFalse(dateValid(pastDate));
+        Date actualDate = Date.from(new java.util.Date().toInstant());
+        assertTrue(uni.dateValid(actualDate));
+
+        Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
+        assertTrue(uni.dateValid(futureDate));
+    }
+
+    @Test
+    public void enterNIFandPINobtTest() throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
+            NullPointerException, IllegalArgumentException, IncorrectValDateException {
+        Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
+
+        uni.enterNIFandPINobt(nif, futureDate);
+        //assertEquals(expected, actual);
 
     }
+
+    // a.addAccredNumb("47294716742");
 
     // @Test
     // public void sendPinTest() throws NifNotRegisteredException,
