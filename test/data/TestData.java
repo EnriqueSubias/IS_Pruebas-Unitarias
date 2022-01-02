@@ -1,5 +1,6 @@
 package test.data;
 
+import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import src.data.AccredNumb;
@@ -7,7 +8,9 @@ import src.data.DocPath;
 import src.data.Nif;
 import src.data.Password;
 import src.data.PINcode;
+import src.services.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class TestData {
 
@@ -59,4 +62,15 @@ public class TestData {
         assertEquals(pin, this.pinCode.getPin());
     }
 
+    @Test
+    public void dateValidTest() {
+        Date futuretDate = new Date();
+        LocalDate.from(futuretDate.toInstant().plusDays(7))
+        assertTrue(UnifiedPlatform.dateValid(futureDate));
+
+        //Date pastDate = new Date();
+        //LocalDate.from(pastDate.toInstant().plusDays(7))
+        //assertFalse(dateValid(pastDate));
+
+    }
 }
