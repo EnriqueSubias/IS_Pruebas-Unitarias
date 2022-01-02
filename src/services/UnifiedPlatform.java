@@ -22,22 +22,22 @@ import java.util.Date;
 
 import java.util.HashMap;
 
-
 public class UnifiedPlatform { // implements CertificationAuthority {
 
     // The class members
 
     // Input events
 
-    String[] tramites = {"vida laboral", "numero seguridad social"};
     String[] instituciones = { "SS", "AEAT", "DGT", "MJ" };
-    String[] persona = { "persona física", "persona jurídica" };
-    String[] autMethod = { "Cl@ve PIN", "certificado digital" };
+    String[] tramites = { "vida laboral", "numero seguridad social" };
+
+    String[] persona = { "persona fisica", "persona juridica" };
+    String[] autMethod = { "Cl@ve PIN", "Cl@ve Permanente", "certificado digital" };
 
     String institution;
     String personType;
-    String report;
     String certReport;
+    String report;
     String authentication;
     Nif nifdoc;
     PINcode pindoc;
@@ -50,10 +50,9 @@ public class UnifiedPlatform { // implements CertificationAuthority {
     PDFDocument pdfDoc;
 
     HashMap<String, String> database;
-    
 
     public void processSearcher() {
-        // se procede a utilizar el buscador de trámites. Este evento emula la acción de
+        // se procede a utilizar el buscador de tramites. Este evento emula la accion de
         // clicar en el buscador para desplegar el campo de texto en el que introducir
         // la o las palabras clave.
 
@@ -67,93 +66,117 @@ public class UnifiedPlatform { // implements CertificationAuthority {
             }
         }
     }
-    
+
     public void enterKeyWords(String keyWord) throws AnyKeyWordProcedureException {
-        // se introduce/n la/s palabra/s clave en el buscador de trámites. Obtiene la
-        // AAPP responsable de ese trámite y la muestra por pantalla.
+        // se introduce/n la/s palabra/s clave en el buscador de tramites. Obtiene la
+        // AAPP responsable de ese tramite y la muestra por pantalla.
         System.out.println("Buscando AAPP...");
         institution = searchKeyWords(keyWord);
 
         if (institution.compareTo("SS") == 0) {
             System.out.println("SS");
-            //selectSS();
+            selectSS();
         } else if (institution.compareTo("AEAT") == 0) {
             System.out.println("AEAT");
-            //ggoto AEAT selectAEAT();
+            // selectAEAT();
         }
-        //throw new AnyKeyWordProcedureException();
+        // throw AnyKeyWordProcedureException();
     }
 
-    
-
     public void selectSS() {
-        // Evento que emula la accion de clicar en la sección SS en el mosaico inicial.
-        String institutionToSelect = "SS";
-        for (int i = 0; i < instituciones.length; i++) {
-            if (institutionToSelect.compareTo(instituciones[i]) == 0) {
-                institution = instituciones[i];
-                System.out.println("SS Seleccionada");
-                break;
-            }
-        }
-        //selectCitizens();
+        // Evento que emula la accion de clicar en la seccion SS en el mosaico inicial.
+        institution = "SS";
+        tramites[0] = "vida laboral";
+        tramites[1] = "numero seguridad social";
+        // String institutionToSelect = "SS";
+        // for (int i = 0; i < instituciones.length; i++) {
+        // if (institutionToSelect.compareTo(instituciones[i]) == 0) {
+        // institution = instituciones[i];
+        // System.out.println("SS Seleccionada");
+        // break;
+        // }
+        // }
+    }
+
+    public void selectAEAT() {
+        institution = "AEAT";
+        tramites[0] = "obtener datos fiscales";
+        tramites[1] = "borrador de la renta";
+    }
+
+    public void selectMJ() {
+        institution = "MJ";
+        tramites[0] = "solicitar el certificado de nacimiento";
+    }
+
+    public void selectDGT() {
+        institution = "DGT";
+        tramites[0] = "puntos del carnet";
     }
 
     public void selectCitizens() {
-        // Evento que emula la acción de clicar el enlace 'Ciudadanos', en la sección de
-        // la SS
-        String personTypeToSelect = "persona física";
-        if (institution != null) {
-            for (int i = 0; i < persona.length; i++) {
-                if (persona[i].compareTo(personTypeToSelect) == 0) {
-                    personType = persona[i];
-                }
-            }
-            System.out.println("Persona física Seleccionado");
+        // Evento que emula la accion de clicar el enlace 'Ciudadanos', en la SS
+        // String personTypeToSelect = "persona fisica";
+        if (institution != null) { // Precondiciones
+            // for (int i = 0; i < persona.length; i++) {
+            // if (persona[i].compareTo(personTypeToSelect) == 0) {
+            personType = "persona fisica";
+            // }
+            // }
+            // System.out.println("Persona fisica Seleccionado");
+        } // selectReports();
+    }
+
+    public void selectBusiness() {
+        if (institution != null) { // Precondiciones
+            personType = "persona juridica";
         }
-        selectReports();
     }
 
     public void selectReports() {
-        // evento que emula la acción de clicar el enlace 'Informes y certificados', en
-        // el apartado 'Ciudadanos' de la SS
-        String reportToSelect = "Informes y certificados";
-        if (personType != null && personType.compareTo("persona física") == 0) {
-            report = reportToSelect;
+        // Clicar el enlace 'Informes y certificados', en 'Ciudadanos' de la SS
+        // String reportToSelect = "Informes y certificados";
+        if (institution != null && institution.compareTo("SS") == 0 && personType != null
+                && personType.compareTo("persona fisica") == 0) { // Precondiciones
+            report = "informes y certificados";
         }
-        byte option = 0;
-        selectCertificationReport(option);
+        // byte option = 0;
+        // selectCertificationReport(option);
     }
 
     public void selectCertificationReport(byte opc) {
-        // evento que emula la acción de seleccionar el informe o certificado concreto
-        // que se desea obtener, tras presentar un menú con las dos opciones
-        // disponibles. Utilizaremos un byte para indicar de qué informe se trata.
-        
-        if (institution != null && personType != null && personType.compareTo("persona física") == 0) {
-            if(opc == 1){
-                //pdfDoc = new LaboralLifeDoc();
-            }else if (opc == 2){
-                 //pdfDoc = new MemberAccreditationDoc();
+        // evento que emula la accion de seleccionar el informe o certificado concreto
+        // que se desea obtener, tras presentar un menu con las dos opciones
+        // disponibles. Utilizaremos un byte para indicar de que informe se trata.
+
+        if (institution != null && institution.compareTo("SS") == 0 && personType != null
+                && personType.compareTo("persona fisica") == 0 && report != null
+                && report.compareTo("informes y certificados") == 0) { // Precondiciones
+            // if (opc == 0) {
+            // // pdfDoc = new LaboralLifeDoc();
+            // } else if (opc == 1) {
+            // // pdfDoc = new MemberAccreditationDoc();
+            // }
+            if (opc >= 0 && opc < tramites.length) {
+                certReport = tramites[opc];
             }
-            // No se ha selecionado una opcion valida
         }
     }
 
     public void selectAuthMethod(byte opc) {
-
-        if (institution != null && personType != null && personType.compareTo("persona física") == 0
-                && certReport != null) {
-            if (opc == 1) {
-                // Cl@ve PIN
-                authentication = tramites[opc];
-                System.out.println("Cl@ve PIN Seleccionada");
-            } else if (opc == 2) {
-                // certificado digital
-                authentication = tramites[opc];
-                System.out.println("certificado digital Seleccionado");
+        if (institution != null && personType != null && report != null && certReport != null) {
+            // if (opc == 0) {
+            // // Cl@ve PIN
+            // authentication = autMethod[opc];
+            // System.out.println("Cl@ve PIN Seleccionada");
+            // } else if (opc == 1) {
+            // // certificado digital
+            // authentication = autMethod[opc];
+            // System.out.println("certificado digital Seleccionado");
+            // }
+            if (opc >= 0 && opc < autMethod.length) {
+                authentication = autMethod[opc];
             }
-            // No se ha selecionado una opcion valida
         }
     }
 
@@ -163,8 +186,8 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         // transmetre les dades del ciutadà que l’acrediten en Cl@ve PIN,
         // i sol·licitud del PIN per a la realització d’un tràmit,
         // via connexió amb l’autoritat de certificació responsable
-        if (institution != null && personType != null && personType.compareTo("persona física") == 0
-                && certReport != null && authentication.equals("Cl@ve PIN")) { // Preconditions
+        if (institution != null && personType != null && certReport != null && authentication != null
+                && authentication.equals("Cl@ve PIN")) { // Preconditions
             if (dateValid(valDate)) {
                 if (ca.sendPIN(nifdoc, valDate)) {
                     this.nifdoc = new Nif(nif.getNif());
@@ -184,33 +207,33 @@ public class UnifiedPlatform { // implements CertificationAuthority {
     }
 
     public void enterPIN(PINcode pin) throws NotValidPINException, NotAffiliatedException, ConnectException {
-        // el usuario introduce el PIN recibido vía SMS, con objeto de completar su
-        // identificación. Esta operación se aplica siempre en el proceso de
-        // identificación con Cl@ve PIN, pero también en los casos en los que se escoge
-        // Cl@ve permanente y el usuario tiene activado el método reforzado.
+        // el usuario introduce el PIN recibido via SMS, con objeto de completar su
+        // identificacion. Esta operacion se aplica siempre en el proceso de
+        // identificacion con Cl@ve PIN, pero tambien en los casos en los que se escoge
+        // Cl@ve permanente y el usuario tiene activado el metodo reforzado.
 
         // TODO Faltan las precondiciones!!!!
-        
+
         // this.pindoc = new PINcode(pin.getPin());
         // this.MA = MemberAccreditationDoc(seguridadSS.getMembAccred(nifdoc)) {
         if (ca.checkPIN(nifdoc, pin)) {
             if (accNumber == null) {
-                throw new NotAffiliatedException(); // TODO Revisar si es correcto que esté aquí
+                throw new NotAffiliatedException(); // TODO Revisar si es correcto que este aqui
             }
-            System.out.println("PIN válido");
+            System.out.println("PIN valido");
         }
     }
 
     private void printDocument() throws BadPathException, PrintingException {
         // El usuario lanza la orden de imprimir el documento. No se pide su
-        // implementación.
+        // implementacion.
         printDocument(pdfDoc.getPath());
         System.out.println("PDF impreso");
     }
 
     private void downloadDocument() throws BadPathException {
         // El usuario lanza la orden de descargar el documento. No se pide su
-        // implementación.
+        // implementacion.
         downloadDocument(pdfDoc.getPath());
         System.out.println("PDF descargado");
 
@@ -218,17 +241,16 @@ public class UnifiedPlatform { // implements CertificationAuthority {
 
     private void selectPath(DocPath path) throws BadPathException {
         // El usuario escoge la ruta en la que guardar el documento. No se pide su
-        // implementación.
+        // implementacion.
         pdfDoc.moveDoc(path);
         System.out.println("Ruta seleccionada");
     }
 
     // Other operations
     private String searchKeyWords(String keyWord) throws AnyKeyWordProcedureException {
-        if(database.containsKey(keyWord)){
+        if (database.containsKey(keyWord)) {
             return new String(database.get(keyWord));
-        }
-        else{
+        } else {
             throw new AnyKeyWordProcedureException();
         }
     }
@@ -248,11 +270,11 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         System.out.println("PDF enviado para descargar a" + path.toString());
     }
 
-    public void loadDatabase(HashMap<String,String> databaseP) { // TODO poner como boolean
+    public void loadDatabase(HashMap<String, String> databaseP) { // TODO poner como boolean
         this.database = databaseP;
     }
 
-    public String getInstitution(){
+    public String getInstitution() {
         return institution;
     }
 
@@ -294,5 +316,5 @@ public class UnifiedPlatform { // implements CertificationAuthority {
 // Ojo: Un metodo de test por cada metodo NO es valido
 
 // Hay que hacer un metodo de test por cada parte relevante del caso de uso, y
-// tendran que ir en orden, para hacer un test habrá que haber hecho los
+// tendran que ir en orden, para hacer un test habra que haber hecho los
 // anteriores

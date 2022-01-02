@@ -28,7 +28,7 @@ import java.util.function.BooleanSupplier;
 import java.util.HashMap;
 import java.util.Map;
 
-public class enterKeywordsTest {
+public class UnifiedPlatformTest {
 
     DocPath docPath;
     AccredNumb accredNumb;
@@ -47,7 +47,7 @@ public class enterKeywordsTest {
     }
 
     @Test
-    public void successTest() throws AnyKeyWordProcedureException {
+    public void keywordSuccessTest() throws AnyKeyWordProcedureException {
         institutionToSelect.put("vida laboral", "SS");
         institutionToSelect.put("numero seguridad social", "SS");
         institutionToSelect.put("puntos del carnet", "DGT");
@@ -65,7 +65,7 @@ public class enterKeywordsTest {
     }
 
     @Test
-    public void failedTest() {
+    public void keywordFailedTest() {
 
         institutionToSelect.put("vida laboral", "SS");
         institutionToSelect.put("numero seguridad social", "SS");
@@ -85,4 +85,40 @@ public class enterKeywordsTest {
         assertTrue(actualMessage2.contains("Tramite no encontrado"));
     }
 
+    @Test
+    public void enterNIFandPINobtTest()
+            throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
+            NullPointerException, IllegalArgumentException, IncorrectValDateException {
+        Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
+
+        uni.enterNIFandPINobt(nif, futureDate);
+        //assertEquals(expected, actual);
+
+    }
+
+    // a.addAccredNumb("47294716742");
+
+    // @Test
+    // public void sendPinTest() throws NifNotRegisteredException,
+    // IncorrectValDateException, AnyMobileRegisteredException, ConnectException {
+    // Nif nifNumber = new Nif("12345678A");
+    // Date valDate = new Date(14 / 02 / 2022);
+    // // PINcode pinCodeTest = new enterNIFPINobt(nifNumber, valDate);
+
+    // // UnifiedPlatform.enterNIFPINobt(nifNumber, valDate);
+    // }
+
+    @Test
+    public void dateValidTest() throws IncorrectValDateException {
+        Date pastDate = Date.from((new java.util.Date()).toInstant().minusSeconds(1576800000));
+        Exception exception = assertThrows(IncorrectValDateException.class, () -> uni.dateValid(pastDate));
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains("NIF and date do not correspond with the citizen"));
+
+        Date actualDate = Date.from(new java.util.Date().toInstant());
+        assertTrue(uni.dateValid(actualDate));
+
+        Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
+        assertTrue(uni.dateValid(futureDate));
+    }
 }
