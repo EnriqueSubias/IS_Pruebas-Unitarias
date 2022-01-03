@@ -87,32 +87,35 @@ public class UnifiedPlatformTest {
 
     @Test
     public void selectAAPPTest() {
-        // TODO
         assertEquals(null, uni.getInstitution());
-        // Seleccionar tramite y luego:
-        //assertEquals("null", uni.getTramites());
-        
+
         uni.selectSS();
         assertEquals("SS", uni.getInstitution());
 
         uni.selectAEAT();
         assertEquals("AEAT", uni.getInstitution());
-        // Seleccionar tramite y luego:
-        //assertEquals("", uni.getTramites());
 
         uni.selectSS();
         assertEquals("SS", uni.getInstitution());
-
-
-
     }
-    
+
     @Test
     public void selectPersonTypeTest() {
-        // TODO
-        
+        uni.selectCitizens();
+        assertEquals(null, uni.getPersonType());
+
+        uni.selectSS();
+        uni.selectCitizens();
+        assertEquals("persona fisica", uni.getPersonType());
+
+        uni.selectBusiness();
+        assertEquals("persona juridica", uni.getPersonType());
+
+        uni.selectMJ();
+        uni.selectCitizens();
+        assertEquals("persona fisica", uni.getPersonType());
     }
-    
+
     @Test
     public void selectReportsTest() {
         // TODO
@@ -120,7 +123,7 @@ public class UnifiedPlatformTest {
         String report = uni.getReport();
         System.out.println(report);
     }
-    
+
     @Test
     public void selectCertificationReportTest() {
         // TODO
@@ -153,17 +156,17 @@ public class UnifiedPlatformTest {
     public void enterNIFandPINobtTest()
             throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
             NullPointerException, IllegalArgumentException, IncorrectValDateException {
-        
+
         System.out.println("nif: " + nif);
-        
+
         nif = new Nif("12345678A");
-        
+
         System.out.println(nif);
-        
+
         Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
 
         uni.enterNIFandPINobt(nif, futureDate);
-        
+
         // assertEquals(expected, actual);
 
     }

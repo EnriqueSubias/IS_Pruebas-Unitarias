@@ -43,7 +43,7 @@ public class DataTest {
     @Test
     public void addPathTest() throws NullPointerException {
         String path = "/doc/vida_laboral.pdf";
-        docPath.addDocPath(path, accredNumb);
+        docPath.addDocPath(path);
         assertEquals(path, docPath.getPath());
     }
 
@@ -75,6 +75,5 @@ public class DataTest {
         this.pinCode = new PINcode(pin);
         assertEquals(pin, this.pinCode.getPin());
     }
-
 
 }

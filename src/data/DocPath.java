@@ -12,7 +12,7 @@ public final class DocPath {
     }
 
     // private final AccredNumb numberSS;
-    public void addDocPath(String path, AccredNumb numberSS) throws NullPointerException {
+    public void addDocPath(String path) throws NullPointerException {
         if (path == null) {
             throw new NullPointerException("path or numberSS entered as null Parameter");
         }

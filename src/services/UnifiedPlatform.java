@@ -232,33 +232,39 @@ public class UnifiedPlatform { // implements CertificationAuthority {
     }
 
     public void enterPIN(PINcode pin)
-            throws NotValidPINException, NotAffiliatedException, ConnectException, java.net.ConnectException {
+            throws NotValidPINException, NotAffiliatedException, ConnectException, java.net.ConnectException,
+            BadPathException {
         // el usuario introduce el PIN recibido via SMS, con objeto de completar su
         // identificacion. Esta operacion se aplica siempre en el proceso de
         // identificacion con Cl@ve PIN, pero tambien en los casos en los que se escoge
         // Cl@ve permanente y el usuario tiene activado el metodo reforzado.
 
-        // TODO Faltan las precondiciones!!!!
+        if (institution != null && personType != null && certReport != null && authentication != null
+                && (authentication.equals("Cl@ve PIN") || (authentication.equals("Cl@ve Permanente")))) { // Preconditions
 
-        // this.pindoc = new PINcode(pin.getPin());
-        // this.MA = MemberAccreditationDoc(seguridadSS.getMembAccred(nifdoc)) {
-        if (ca.checkPIN(nifdoc, pin)) {
-            MemberAccred = seguridadSS.getMembAccred(nifdoc);
-            if (MemberAccred == null) {
-                throw new NotAffiliatedException();
-            } else {
-                // System.out.println("PIN valido");
-                if (certReport.compareTo("vida laboral") == 0) {
-                    loadPdfLaboralLife();
+            // this.pindoc = new PINcode(pin.getPin());
+            // this.MA = MemberAccreditationDoc(seguridadSS.getMembAccred(nifdoc)) {
+            if (ca.checkPIN(nifdoc, pin)) {
+                MemberAccred = seguridadSS.getMembAccred(nifdoc);
+                if (MemberAccred == null) {
+                    throw new NotAffiliatedException();
+                } else {
+                    // System.out.println("PIN valido");
+                    obtaineReportSelected();
                 }
+            } else {
+                throw new NotValidPINException();
             }
-        } else {
-            throw new NotValidPINException();
         }
     }
 
-    private void loadPdfLaboralLife() throws java.net.ConnectException, NotAffiliatedException {
-        pdfDoc = seguridadSS.getLaboralLife(nifdoc);
+    private void obtaineReportSelected() throws java.net.ConnectException, NotAffiliatedException, BadPathException {
+        if (certReport.compareTo("vida laboral") == 0) {
+            pdfDoc = seguridadSS.getLaboralLife(nifdoc);
+            DocPath defaultPath = new DocPath();
+            defaultPath.addDocPath("/tmp/laboralLife" + nifdoc.getNif());
+            OpenDocument(defaultPath);
+        }
     }
 
     private void printDocument() throws BadPathException, PrintingException {
