@@ -1,5 +1,7 @@
 package src.data;
 
+import src.exceptions.*;
+
 /**
  * Essential data classes
  */
@@ -7,9 +9,9 @@ public final class Password {
     // The tax identification number in the Spanish state.
     private final String password;
 
-    public Password(String password) throws NullPointerException {
+    public Password(String password) throws NullPasswordException, NotValidPasswordException {
         if (password == null) {
-            throw new NullPointerException("password is null");
+            throw new NullPasswordException();
         } else {
             boolean upperCheck = false;
             boolean lowerCheck = false;
@@ -35,11 +37,10 @@ public final class Password {
             if (password.length() >= 6 && password.length() <= 30) {
                 lengthCheck = true;
             }
-
             if (upperCheck && lowerCheck && digitCheck && lengthCheck) {
                 this.password = password;
             } else {
-                throw new IllegalArgumentException("Invalid Password format or length");
+                throw new NotValidPasswordException();
                 // it must contain lower and upper case letters and digits
             }
         }

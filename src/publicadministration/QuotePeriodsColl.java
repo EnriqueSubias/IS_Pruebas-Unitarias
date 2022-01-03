@@ -3,6 +3,7 @@ package src.publicadministration;
 import java.util.*;
 
 import src.exceptions.AlreadyAddedException;
+import src.exceptions.NoSuchPeriodException;
 
 public class QuotePeriodsColl { // Represents the total quote periods known as a registered worker
 
@@ -18,13 +19,13 @@ public class QuotePeriodsColl { // Represents the total quote periods known as a
         return this.cola;
     }
 
-    public QuotePeriod getSpecificPeriod(Date e) {
+    public QuotePeriod getSpecificPeriod(Date e) throws NoSuchPeriodException {
         QuotePeriod specific = null;
         if (cola.containsKey(e)) {
             specific = cola.get(e);
         }
         if (specific == null) {
-            throw new NoSuchElementException("No esta el periode buscado");
+            throw new NoSuchPeriodException();
         }
         return specific;
     }

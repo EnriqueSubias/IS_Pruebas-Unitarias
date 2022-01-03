@@ -1,5 +1,7 @@
 package src.data;
 
+import src.exceptions.*;
+
 /**
  * Essential data classes
  */
@@ -9,14 +11,10 @@ public final class AccredNumb {
     // hemos quitado final de ssNumber
     private String ssNumber; // 11 digits length
 
-    //public AccredNumb() {
-    //    this.ssNumber = null;
-    //}
-
-    public AccredNumb(String code) throws IllegalArgumentException {
+    public AccredNumb(String code) throws NotValidAccredNumberException {
         if (code.length() != 11) {
             // Checks if the number has length 11 if not throws an exception
-            throw new IllegalArgumentException("Invalid AccredNumb length");
+            throw new NotValidAccredNumberException();
         } else {
             boolean correctFormat = true;
             for (int i = 0; i < code.length(); i++) {
@@ -28,13 +26,16 @@ public final class AccredNumb {
             if (correctFormat) {
                 this.ssNumber = code;
             } else {
-                throw new IllegalArgumentException("Invalid AccredNumb format");
+                throw new NotValidAccredNumberException();
             }
         }
 
     }
 
-    public String getAccredNumber() {
+    public String getAccredNumber() throws NotValidAccredNumberException {
+        if (ssNumber == null) {
+            throw new NotValidAccredNumberException();
+        }
         return ssNumber;
     }
 

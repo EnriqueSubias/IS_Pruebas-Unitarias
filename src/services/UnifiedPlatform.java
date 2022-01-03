@@ -9,8 +9,6 @@ import src.data.Password;
 import src.data.PINcode;
 
 import src.exceptions.*;
-import src.publicadministration.*;
-import src.services.*;
 
 import java.util.Date;
 
@@ -19,11 +17,10 @@ import java.util.HashMap;
 public class UnifiedPlatform {
 
     // The class members
-
     // Input events
 
     String[] instituciones = { "SS", "AEAT", "DGT", "MJ" };
-    String[] tramites;// = { "vida laboral", "numero seguridad social" };
+    String[] tramites;//={ "vida laboral", "numero seguridad social" };
 
     String[] persona = { "persona fisica", "persona juridica" };
     String[] autMethod = { "Cl@ve PIN", "Cl@ve Permanente", "certificado digital" };
@@ -37,6 +34,7 @@ public class UnifiedPlatform {
     Nif nifdoc;
     PINcode pindoc;
     PINcode pinSMS;
+    boolean pinSent;
 
     CertificationAuthority ca;
     SS seguridadSS;
@@ -45,6 +43,11 @@ public class UnifiedPlatform {
     PDFDocument pdfDoc;
 
     HashMap<String, String> database;
+
+    public UnifiedPlatform(CertificationAuthority CertAutho,SS SeguridadSocial){
+        this.ca = CertAutho;
+        this.seguridadSS = SeguridadSocial;
+    }
 
     public void processSearcher() throws AnyKeyWordProcedureException {
         // se procede a utilizar el buscador de tramites. Este evento emula la accion de
@@ -205,8 +208,8 @@ public class UnifiedPlatform {
     }
 
     public void enterNIFandPINobt(Nif nif, Date valDate)
-            throws AnyMobileRegisteredException, ConnectException, NullPointerException,
-            IncorrectValDateException, NifNotRegisteredException {
+            throws AnyMobileRegisteredException, ConnectException,
+            IncorrectValDateException, NullValDateException, NifNotRegisteredException,NullNifException,  NullPinException, NotValidPINException {
         // transmetre les dades del ciutadà que l’acrediten en Cl@ve PIN,
         // i sol·licitud del PIN per a la realització d’un tràmit,
         // via connexió amb l’autoritat de certificació responsable
@@ -214,20 +217,25 @@ public class UnifiedPlatform {
         if (institution != null && personType != null && certReport != null && authentication != null
                 && authentication.equals("Cl@ve PIN")) { // Preconditions
             if (nif == null) {
-                throw new NullPointerException("NIF is null");
+                throw new NullNifException();
             }
             if (dateValid(valDate)) {
                 if (ca.sendPIN(nif, valDate)) {
-                    // this.nifdoc = new Nif(nif.getNif());
+                    nifdoc = nif;
                     System.out.println("PIN enviado por SMS");
+                    pinSent = true;
                 }
             }
         }
     }
 
-    public boolean dateValid(Date valDate) throws IncorrectValDateException, NullPointerException {
+    public boolean getEnterNIFandPINobtState() {
+        return pinSent;
+    }
+
+    public boolean dateValid(Date valDate) throws IncorrectValDateException, NullValDateException {
         if (valDate == null) {
-            throw new NullPointerException();
+            throw new NullValDateException();
         }
         Date currentDate = new java.util.Date();
         if (currentDate.after(valDate)) {
@@ -238,7 +246,7 @@ public class UnifiedPlatform {
     }
 
     public void enterPIN(PINcode pin)
-            throws NifNotRegisteredException, NotValidPINException, NotAffiliatedException, ConnectException,
+            throws NifNotRegisteredException, NullPinException, NotAffiliatedException, ConnectException,
             BadPathException, NullPointerException {
         // el usuario introduce el PIN recibido via SMS, con objeto de completar su
         // identificacion. Esta operacion se aplica siempre en el proceso de
@@ -246,7 +254,7 @@ public class UnifiedPlatform {
         // Cl@ve permanente y el usuario tiene activado el metodo reforzado.
 
         if (institution != null && personType != null && certReport != null && authentication != null
-                && (authentication.equals("Cl@ve PIN") || (authentication.equals("Cl@ve Permanente")))) { // Preconditions
+                && (authentication.equals("Cl@ve PIN") || (authentication.equals("Cl@ve Permanente"))) && pinSent) { // Preconditions
 
             // this.pindoc = new PINcode(pin.getPin());
             // this.MA = MemberAccreditationDoc(seguridadSS.getMembAccred(nifdoc)) {
@@ -259,7 +267,7 @@ public class UnifiedPlatform {
                     obtainReportSelected();
                 }
             } else {
-                throw new NotValidPINException();
+                throw new NullPinException();
             }
         }
     }

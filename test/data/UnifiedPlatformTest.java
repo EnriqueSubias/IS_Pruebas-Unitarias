@@ -20,6 +20,7 @@ import src.exceptions.*;
 import src.publicadministration.*;
 import src.services.CertificationAuthority;
 import src.services.UnifiedPlatform;
+import test.services.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,10 +42,13 @@ public class UnifiedPlatformTest {
     HashMap<String, String> institutionToSelect = new HashMap<>();
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws AlreadyAddedException, NullPasswordException, NotValidPasswordException,
+            NotValidAccredNumberException {
         this.docPath = new DocPath();
         this.accredNumb = new AccredNumb("12345678901");
-        this.uni = new UnifiedPlatform();
+        CertAutoDobleImplementsTest cert = new CertAutoDobleImplementsTest();
+        SSDobleImplementesTest ss = new SSDobleImplementesTest();
+        this.uni = new UnifiedPlatform(cert, ss);
     }
 
     @Test
@@ -180,20 +184,8 @@ public class UnifiedPlatformTest {
     @DisplayName("Comprobación del NIF y PIN de Cl@ve")
     public void enterNIFandPINobtTest()
             throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
-            NullPointerException, IncorrectValDateException {
-
-        Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
-
-        // uni.enterNIFandPINobt(nif, futureDate);
-        // assertEquals(expected, actual);
-
-        // System.out.println(nif);
-
-        // Exception exception = assertThrows(NifNotRegisteredException.class, () ->
-        // uni.enterNIFandPINobt(nif, futureDate));
-        // String actualMessage = exception.getMessage();
-        // assertTrue(actualMessage.contains("NIF coundn't be registered in Cl@ve
-        // PIN"));
+            NullPointerException, IncorrectValDateException, NullPinException, NotValidPINException,
+            NullValDateException, NullNifException {
 
         uni.selectSS();
         uni.selectCitizens();
@@ -201,13 +193,47 @@ public class UnifiedPlatformTest {
         uni.selectCertificationReport((byte) 1);
         uni.selectAuthMethod((byte) 0);
 
-        Exception exception = assertThrows(NullPointerException.class, () -> uni.enterNIFandPINobt(null, null));
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains("NIF is null"));
+        assertThrows(NullNifException.class, () -> uni.enterNIFandPINobt(null, null));
 
-        // nif = new Nif("12345678A");
+        nif = new Nif("12345678A");
+        Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
+        // assertDoesNotThrow(
+        uni.enterNIFandPINobt(nif, futureDate);
 
+        assertTrue(uni.getEnterNIFandPINobtState());
     }
+
+    @Test
+    @DisplayName("Comprobación enterPin")
+    public void enterPinTest()
+            throws NifNotRegisteredException, NullPinException, NotValidPINException, NotAffiliatedException,
+            ConnectException, BadPathException, NullPointerException, AnyMobileRegisteredException,
+            IncorrectValDateException, NullValDateException, NullNifException {
+
+        uni.selectSS();
+        uni.selectCitizens();
+        uni.selectReports();
+        uni.selectCertificationReport((byte) 1);
+        uni.selectAuthMethod((byte) 0);
+
+        nif = new Nif("12345678A");
+        Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
+        uni.enterNIFandPINobt(nif, futureDate);
+
+        PINcode pin = new PINcode("000");
+        uni.enterPIN(pin);
+    }
+    /*
+     * Es conveniente añadir las excepciones que consideréis oportunas. Para el caso
+     * de la clase
+     * Nif, podemos definir las dos situaciones siguientes: que al constructor le
+     * llegue null (objeto
+     * sin instanciar), y también un nif mal formado.
+     * 
+     * ¿Cuál es el caso de las otras clases básicas? ¿Qué excepciones convendrá
+     * contemplar?
+     * 
+     */
 
     // a.addAccredNumb("47294716742");
 
@@ -223,7 +249,7 @@ public class UnifiedPlatformTest {
 
     @Test
     @DisplayName("Comprobacion de la fecha de validez del NIF")
-    public void dateValidTest() throws IncorrectValDateException {
+    public void dateValidTest() throws IncorrectValDateException, NullValDateException {
         Date pastDate = Date.from((new java.util.Date()).toInstant().minusSeconds(1576800000));
         Exception exception = assertThrows(IncorrectValDateException.class, () -> uni.dateValid(pastDate));
         String actualMessage = exception.getMessage();
