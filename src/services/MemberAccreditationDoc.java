@@ -11,6 +11,7 @@ public class MemberAccreditationDoc extends PDFDocument { // Represents the memb
     public MemberAccreditationDoc(Nif nif, AccredNumb nAff) { // Initializes attributes
         this.nif = nif;
         this.numAffil = nAff;
+        // super(creatDate, path, file);
         // TODO intentar implementear el deep copy
     }
 

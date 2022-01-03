@@ -4,6 +4,7 @@ import java.util.*;
 
 import src.exceptions.AlreadyAddedException;
 import src.exceptions.NoSuchPeriodException;
+import src.exceptions.NullValDateException;
 
 public class QuotePeriodsColl { // Represents the total quote periods known as a registered worker
 
@@ -19,14 +20,18 @@ public class QuotePeriodsColl { // Represents the total quote periods known as a
         return this.cola;
     }
 
-    public QuotePeriod getSpecificPeriod(Date e) throws NoSuchPeriodException {
+    public QuotePeriod getSpecificPeriod(Date e) throws NoSuchPeriodException, NullValDateException {
         QuotePeriod specific = null;
-        if (cola.containsKey(e)) {
-            specific = cola.get(e);
+        if (e != null) {
+            if (cola.containsKey(e)) {
+                specific = cola.get(e);
+            } else {
+                throw new NoSuchPeriodException();
+            }
+        } else {
+            throw new NullValDateException();
         }
-        if (specific == null) {
-            throw new NoSuchPeriodException();
-        }
+
         return specific;
     }
 

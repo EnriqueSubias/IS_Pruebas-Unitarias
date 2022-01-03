@@ -10,12 +10,12 @@ public final class Nif {
     // The tax identification number in the Spanish state.
     private final String nif;
 
-    public Nif(String code) throws NullPointerException, IllegalArgumentException {
+    public Nif(String code) throws NullNifException, NotValidNifException {
         if (code == null || "".equals(code)) {
-            throw new NullPointerException("No NIF entered as parameter");
+            throw new NullNifException();
         }
         if (code.length() != 9 || Character.isLetter(code.length() - 1)) {
-            throw new IllegalArgumentException("Invalid NIF length");
+            throw new NotValidNifException();
         } else {
             boolean correctFormat = true;
             for (int i = 0; i < code.length() - 1; i += 1) {
@@ -32,12 +32,12 @@ public final class Nif {
         }
     }
 
-    public String getNif() throws NifNotRegisteredException {
+    public String getNif() throws NotValidNifException {
         if (this.nif != null) {
             return this.nif;
         } else {
             // return null;
-            throw new NifNotRegisteredException();
+            throw new NotValidNifException();
         }
     }
 

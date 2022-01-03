@@ -7,7 +7,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.awt.Desktop;
 import src.data.DocPath;
-import src.exceptions.BadPathException;
+import src.exceptions.*;
 
 public class PDFDocument { // Represents a PDF document
 
@@ -15,22 +15,47 @@ public class PDFDocument { // Represents a PDF document
     private DocPath path;
     public File file;
 
-    public PDFDocument() { // Initializes attributes and emulates the document download at a default path
-        // this.createDate = createDate
-        // this.path = path
-        // this.file = file
+    public PDFDocument() {
+    }
+
+    public PDFDocument(Date creatDate, DocPath path, File file)
+            throws NullValDateException, NullPathException, NullFileException {
+        // Initializes attributes and emulates the document
+        // download at a default path
+        if (creatDate == null) {
+            throw new NullValDateException();
+        }
+        if (path == null) {
+            throw new NullPathException();
+        }
+        if (file == null) {
+            throw new NullFileException();
+        }
+
+        this.creatDate = creatDate;
+        this.path = path;
+        this.file = file;
     }
 
     // the getters
-    public Date getCreatDate() {
+    public Date getCreatDate() throws NullValDateException {
+        if (creatDate == null) {
+            throw new NullValDateException();
+        }
         return this.creatDate;
     }
 
-    public DocPath getPath() {
+    public DocPath getPath() throws NullPathException {
+        if (path == null) {
+            throw new NullPathException();
+        }
         return this.path;
     }
 
-    public File getFile() {
+    public File getFile() throws NullFileException {
+        if (file == null) {
+            throw new NullFileException();
+        }
         return this.file;
     }
 
@@ -40,7 +65,12 @@ public class PDFDocument { // Represents a PDF document
         // To implement only optionally
     }
 
-    public void moveDoc(DocPath destPath) throws BadPathException { // Moves the document to the destination path indicated
+    public void moveDoc(DocPath destPath) throws BadPathException, NullPathException { // Moves the document to the
+                                                                                       // destination path
+        // indicated
+        if (destPath == null) {
+            throw new NullPathException();
+        }
         File from = new File(this.file.getPath());
         File to = new File(destPath.getPath());
         try {
@@ -52,7 +82,11 @@ public class PDFDocument { // Represents a PDF document
         this.path = destPath;
     }
 
-    public void openDoc(DocPath path) throws BadPathException { // Opens the document at the path indicated
+    public void openDoc(DocPath path) throws BadPathException, NullPathException { // Opens the document at the path
+                                                                                   // indicated
+        if (path == null) {
+            throw new NullPathException();
+        }
         try {
             File filePath = new File(path.getPath());
             Desktop.getDesktop().open(filePath);

@@ -37,7 +37,7 @@ public class DataTest {
 
     @BeforeEach
     public void setUp() throws AlreadyAddedException, NullPasswordException, NotValidPasswordException,
-            NotValidAccredNumberException {
+            NotValidAccredNumberException, NullAccredNumberException, NullNifException, NotValidNifException {
         this.docPath = new DocPath();
         CertAutoDobleImplementsTest cert = new CertAutoDobleImplementsTest();
         SSDobleImplementesTest ss = new SSDobleImplementesTest();
@@ -46,26 +46,35 @@ public class DataTest {
 
     @Test
     @DisplayName("Comprobación del docPath")
-    public void addPathTest() throws NullPointerException {
-        String path = "/doc/vida_laboral.pdf";
-        docPath.addDocPath(path);
-        assertEquals(path, docPath.getPath());
+    public void addPathTest() {
+        // this.docPath= new docPath();
+        assertThrows(NullPathException.class, () -> this.docPath.addDocPath(null));
+        // assertThrows(NotValidPathException.class, () -> this.accredNumb = new
+        // AccredNumb("Th1sIsN0tAP4th"));
+        assertDoesNotThrow(() -> docPath.addDocPath("/doc/vida_laboral.pdf"));
+        assertEquals("/doc/vida_laboral.pdf", docPath.getPath());
+        // TODO
     }
 
     @Test
     @DisplayName("Comprobación del numero de acreditaccion")
     public void addValidAccredNumbTest() throws NotValidAccredNumberException {
-        this.accredNumb = new AccredNumb("75634816211");
+        assertThrows(NullAccredNumberException.class, () -> this.accredNumb = new AccredNumb(null));
+        assertThrows(NotValidAccredNumberException.class, () -> this.accredNumb = new AccredNumb("651348562651"));
+
+        assertDoesNotThrow(() -> this.accredNumb = new AccredNumb("75634816211"));
         assertEquals("75634816211", accredNumb.getAccredNumber());
+        // TODO
     }
 
     @Test
     @DisplayName("Comprobación del NIF")
-    public void addValidNifTest() throws NifNotRegisteredException {
-
-        this.nif = new Nif("12345678A");
+    public void addValidNifTest() throws NotValidNifException {
+        assertThrows(NullNifException.class, () -> this.nif = new Nif(null));
+        assertThrows(NotValidNifException.class, () -> this.nif = new Nif("7654321Z"));
+        assertDoesNotThrow(() -> this.nif = new Nif("12345678A"));
         assertEquals("12345678A", this.nif.getNif());
-
+        // TODO
     }
 
     @Test

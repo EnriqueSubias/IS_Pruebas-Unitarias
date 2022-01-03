@@ -1,5 +1,7 @@
 package src.data;
 
+import src.exceptions.NullPathException;
+
 /**
  * Essential data classes
  */
@@ -12,9 +14,9 @@ public final class DocPath {
     }
 
     // private final AccredNumb numberSS;
-    public void addDocPath(String path) throws NullPointerException {
+    public void addDocPath(String path) throws NullPathException {
         if (path == null) {
-            throw new NullPointerException("path or numberSS entered as null Parameter");
+            throw new NullPathException();
         }
         // this.numberSS=numberSS;
         this.path = path;

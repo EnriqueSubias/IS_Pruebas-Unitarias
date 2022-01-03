@@ -15,7 +15,8 @@ public class SSDobleImplementesTest implements SS {
     Map<Nif, AccredNumb> databaseAccred;
     Map<Nif, QuotePeriodsColl> databasePeriods;
 
-    public SSDobleImplementesTest() throws AlreadyAddedException, NotValidAccredNumberException {
+    public SSDobleImplementesTest() throws AlreadyAddedException, NotValidAccredNumberException,
+            NullAccredNumberException, NullNifException, NotValidNifException {
         databaseAccred = new HashMap<>();
         databasePeriods = new HashMap<>();
         addsToDatabase();
@@ -46,7 +47,8 @@ public class SSDobleImplementesTest implements SS {
         }
     }
 
-    public void addsToDatabase() throws AlreadyAddedException, NotValidAccredNumberException {
+    public void addsToDatabase() throws AlreadyAddedException, NotValidAccredNumberException, NullAccredNumberException,
+            NullNifException, NotValidNifException {
         Nif user1 = new Nif("12345678A");
         Nif user2 = new Nif("12345678B");
         Nif user3 = new Nif("12345678C");

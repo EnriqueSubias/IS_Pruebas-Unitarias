@@ -11,7 +11,10 @@ public final class AccredNumb {
     // hemos quitado final de ssNumber
     private String ssNumber; // 11 digits length
 
-    public AccredNumb(String code) throws NotValidAccredNumberException {
+    public AccredNumb(String code) throws NotValidAccredNumberException, NullAccredNumberException{
+        if (code == null) {
+            throw new NullAccredNumberException();
+        }
         if (code.length() != 11) {
             // Checks if the number has length 11 if not throws an exception
             throw new NotValidAccredNumberException();

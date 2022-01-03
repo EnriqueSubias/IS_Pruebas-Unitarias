@@ -16,7 +16,8 @@ public class CertAutoDobleImplementsTest implements CertificationAuthority {
     Map<Nif, Password> databaseCredencials;
 
     public CertAutoDobleImplementsTest()
-            throws AlreadyAddedException, NullPasswordException, NotValidPasswordException {
+            throws AlreadyAddedException, NullPasswordException, NotValidPasswordException,
+            NullNifException, NotValidNifException {
         databaseAccredPincode = new HashMap<>();
         databasePinCodes = new HashMap<>();
         databaseCredencials = new HashMap<>();
@@ -51,7 +52,7 @@ public class CertAutoDobleImplementsTest implements CertificationAuthority {
     @Override
     @DisplayName("Comprobación de que el PINcode es correcto")
     public boolean checkPIN(Nif nif, PINcode pin) throws NullPinException, ConnectException {
-        
+
         if (databasePinCodes.containsKey(nif)) {
             PINcode Objective = databasePinCodes.get(nif);
             if (Objective.equals(pin)) {
@@ -93,7 +94,8 @@ public class CertAutoDobleImplementsTest implements CertificationAuthority {
         }
     }
 
-    public void addsToDatabase() throws AlreadyAddedException, NullPasswordException, NotValidPasswordException {
+    public void addsToDatabase() throws AlreadyAddedException, NullPasswordException, NotValidPasswordException,
+            IllegalArgumentException, NullNifException, NotValidNifException {
         Nif user1 = new Nif("12345678A");
         Nif user2 = new Nif("12345678B");
         Nif user3 = new Nif("12345678C");

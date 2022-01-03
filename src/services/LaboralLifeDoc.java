@@ -2,6 +2,7 @@ package src.services;
 
 import src.publicadministration.QuotePeriodsColl;
 import src.data.Nif;
+import src.exceptions.*;
 
 public class LaboralLifeDoc extends PDFDocument { // Represents the laboral life
 
@@ -14,11 +15,19 @@ public class LaboralLifeDoc extends PDFDocument { // Represents the laboral life
     }
 
     // the getters
-    public Nif getNif() {
-        return this.nif;
+    public Nif getNif() throws NifNotRegisteredException {
+        if (this.nif != null) {
+            return this.nif;
+        } else {
+            throw new NifNotRegisteredException();
+        }
     }
 
-    public QuotePeriodsColl getQuotePds() {
-        return this.quotePds;
+    public QuotePeriodsColl getQuotePds() throws NoSuchPeriodException {
+        if (this.quotePds != null) {
+            return this.quotePds;
+        } else {
+            throw new NoSuchPeriodException();
+        }
     }
 }

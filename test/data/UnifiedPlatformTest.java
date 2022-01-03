@@ -43,7 +43,7 @@ public class UnifiedPlatformTest {
 
     @BeforeEach
     public void setUp() throws AlreadyAddedException, NullPasswordException, NotValidPasswordException,
-            NotValidAccredNumberException {
+            NotValidAccredNumberException, NullAccredNumberException, NullNifException, NotValidNifException {
         this.docPath = new DocPath();
         this.accredNumb = new AccredNumb("12345678901");
         CertAutoDobleImplementsTest cert = new CertAutoDobleImplementsTest();
@@ -184,8 +184,8 @@ public class UnifiedPlatformTest {
     @DisplayName("Comprobación del NIF y PIN de Cl@ve")
     public void enterNIFandPINobtTest()
             throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
-            NullPointerException, IncorrectValDateException, NullPinException, NotValidPINException,
-            NullValDateException, NullNifException {
+            IncorrectValDateException, NullPinException, NotValidPINException,
+            NullValDateException, NullNifException, NotValidNifException {
 
         uni.selectSS();
         uni.selectCitizens();
@@ -207,8 +207,9 @@ public class UnifiedPlatformTest {
     @DisplayName("Comprobación enterPin")
     public void enterPinTest()
             throws NifNotRegisteredException, NullPinException, NotValidPINException, NotAffiliatedException,
-            ConnectException, BadPathException, NullPointerException, AnyMobileRegisteredException,
-            IncorrectValDateException, NullValDateException, NullNifException {
+            ConnectException, BadPathException, AnyMobileRegisteredException, IncorrectValDateException,
+            NullValDateException, NullNifException, NullPointerException, NullPathException,
+            NotValidNifException {
 
         uni.selectSS();
         uni.selectCitizens();

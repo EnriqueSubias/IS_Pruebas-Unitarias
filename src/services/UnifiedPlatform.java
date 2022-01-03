@@ -20,7 +20,7 @@ public class UnifiedPlatform {
     // Input events
 
     String[] instituciones = { "SS", "AEAT", "DGT", "MJ" };
-    String[] tramites;//={ "vida laboral", "numero seguridad social" };
+    String[] tramites;// ={ "vida laboral", "numero seguridad social" };
 
     String[] persona = { "persona fisica", "persona juridica" };
     String[] autMethod = { "Cl@ve PIN", "Cl@ve Permanente", "certificado digital" };
@@ -44,7 +44,7 @@ public class UnifiedPlatform {
 
     HashMap<String, String> database;
 
-    public UnifiedPlatform(CertificationAuthority CertAutho,SS SeguridadSocial){
+    public UnifiedPlatform(CertificationAuthority CertAutho, SS SeguridadSocial) {
         this.ca = CertAutho;
         this.seguridadSS = SeguridadSocial;
     }
@@ -209,7 +209,8 @@ public class UnifiedPlatform {
 
     public void enterNIFandPINobt(Nif nif, Date valDate)
             throws AnyMobileRegisteredException, ConnectException,
-            IncorrectValDateException, NullValDateException, NifNotRegisteredException,NullNifException,  NullPinException, NotValidPINException {
+            IncorrectValDateException, NullValDateException, NifNotRegisteredException, NullNifException,
+            NullPinException, NotValidPINException {
         // transmetre les dades del ciutadà que l’acrediten en Cl@ve PIN,
         // i sol·licitud del PIN per a la realització d’un tràmit,
         // via connexió amb l’autoritat de certificació responsable
@@ -246,8 +247,8 @@ public class UnifiedPlatform {
     }
 
     public void enterPIN(PINcode pin)
-            throws NifNotRegisteredException, NullPinException, NotAffiliatedException, ConnectException,
-            BadPathException, NullPointerException {
+            throws NotValidNifException, NullPinException, NotAffiliatedException, ConnectException,
+            BadPathException, NullPointerException, NullPathException {
         // el usuario introduce el PIN recibido via SMS, con objeto de completar su
         // identificacion. Esta operacion se aplica siempre en el proceso de
         // identificacion con Cl@ve PIN, pero tambien en los casos en los que se escoge
@@ -281,7 +282,7 @@ public class UnifiedPlatform {
     }
 
     private void obtainReportSelected() throws NotAffiliatedException, BadPathException, NullPointerException,
-            NifNotRegisteredException, ConnectException {
+            ConnectException, NullPathException, NotValidNifException {
         if (certReport.compareTo("vida laboral") == 0) {
             pdfDoc = seguridadSS.getLaboralLife(nifdoc);
             DocPath defaultPath = new DocPath();
@@ -291,21 +292,21 @@ public class UnifiedPlatform {
         }
     }
 
-    private void printDocument() throws BadPathException, PrintingException {
+    private void printDocument() throws BadPathException, PrintingException, NullPathException {
         // El usuario lanza la orden de imprimir el documento. No se pide su
         // implementacion.
         printDocument(pdfDoc.getPath());
         System.out.println("PDF impreso");
     }
 
-    private void downloadDocument() throws BadPathException {
+    private void downloadDocument() throws BadPathException, NullPathException {
         // El usuario lanza la orden de descargar el documento. No se pide su
         // implementacion.
         downloadDocument(pdfDoc.getPath());
         System.out.println("PDF descargado");
     }
 
-    private void selectPath(DocPath path) throws BadPathException {
+    private void selectPath(DocPath path) throws BadPathException, NullPathException {
         // El usuario escoge la ruta en la que guardar el documento. No se pide su
         // implementacion.
         pdfDoc.moveDoc(path);
@@ -322,7 +323,7 @@ public class UnifiedPlatform {
         }
     }
 
-    private void OpenDocument(DocPath path) throws BadPathException {
+    private void OpenDocument(DocPath path) throws BadPathException, NullPathException {
         pdfDoc.openDoc(pdfDoc.getPath());
         System.out.println("PDF abierto, ruta: " + path.toString());
     }
