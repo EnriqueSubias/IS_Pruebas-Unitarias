@@ -9,11 +9,11 @@ public final class AccredNumb {
     // hemos quitado final de ssNumber
     private String ssNumber; // 11 digits length
 
-    public AccredNumb() {
-        this.ssNumber = null;
-    }
+    //public AccredNumb() {
+    //    this.ssNumber = null;
+    //}
 
-    public void addAccredNumb(String code) throws IllegalArgumentException {
+    public AccredNumb(String code) throws IllegalArgumentException {
         if (code.length() != 11) {
             // Checks if the number has length 11 if not throws an exception
             throw new IllegalArgumentException("Invalid AccredNumb length");

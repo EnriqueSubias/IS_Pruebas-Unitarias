@@ -1,5 +1,7 @@
 package src.data;
 
+import src.exceptions.*;
+
 /**
  * Essential data classes
  */
@@ -30,11 +32,12 @@ public final class Nif {
         }
     }
 
-    public String getNif() {
+    public String getNif() throws NifNotRegisteredException {
         if (this.nif != null) {
             return this.nif;
         } else {
-            return null;
+            // return null;
+            throw new NifNotRegisteredException();
         }
     }
 

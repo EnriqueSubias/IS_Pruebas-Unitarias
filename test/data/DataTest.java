@@ -36,7 +36,6 @@ public class DataTest {
     @BeforeEach
     public void setUp() {
         this.docPath = new DocPath();
-        this.accredNumb = new AccredNumb();
         this.uni = new UnifiedPlatform();
     }
 
@@ -50,13 +49,14 @@ public class DataTest {
     @Test
     public void addValidAccredNumbTest() throws IllegalArgumentException {
         String code = "75634816211";
-        accredNumb.addAccredNumb(code);
+        // accredNumb.addAccredNumb(code);
+        this.accredNumb = new AccredNumb(code);
         assertEquals(code, accredNumb.getAccredNumber());
     }
 
     // data
     @Test
-    public void addValidNifTest() throws NullPointerException, IllegalArgumentException {
+    public void addValidNifTest() throws NullPointerException, IllegalArgumentException, NifNotRegisteredException {
         String nifNumb = "12345678A";
         this.nif = new Nif(nifNumb);
         assertEquals(nifNumb, this.nif.getNif());

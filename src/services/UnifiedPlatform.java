@@ -12,12 +12,6 @@ import src.exceptions.*;
 import src.publicadministration.*;
 import src.services.*;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Date;
 
 import java.util.HashMap;
@@ -210,24 +204,31 @@ public class UnifiedPlatform {
         return authentication;
     }
 
-    public void enterNIFandPINobt(Nif nif, Date valDate) throws NifNotRegisteredException,
-            AnyMobileRegisteredException, ConnectException, NullPointerException, IllegalArgumentException,
-            IncorrectValDateException {
+    public void enterNIFandPINobt(Nif nif, Date valDate)
+            throws AnyMobileRegisteredException, ConnectException, NullPointerException,
+            IncorrectValDateException, NifNotRegisteredException {
         // transmetre les dades del ciutadà que l’acrediten en Cl@ve PIN,
         // i sol·licitud del PIN per a la realització d’un tràmit,
         // via connexió amb l’autoritat de certificació responsable
+
         if (institution != null && personType != null && certReport != null && authentication != null
                 && authentication.equals("Cl@ve PIN")) { // Preconditions
+            if (nif == null) {
+                throw new NullPointerException("NIF is null");
+            }
             if (dateValid(valDate)) {
-                if (ca.sendPIN(nifdoc, valDate)) {
-                    this.nifdoc = new Nif(nif.getNif());
+                if (ca.sendPIN(nif, valDate)) {
+                    // this.nifdoc = new Nif(nif.getNif());
                     System.out.println("PIN enviado por SMS");
                 }
             }
         }
     }
 
-    public boolean dateValid(Date valDate) throws IncorrectValDateException {
+    public boolean dateValid(Date valDate) throws IncorrectValDateException, NullPointerException {
+        if (valDate == null) {
+            throw new NullPointerException();
+        }
         Date currentDate = new java.util.Date();
         if (currentDate.after(valDate)) {
             throw new IncorrectValDateException();
@@ -237,8 +238,8 @@ public class UnifiedPlatform {
     }
 
     public void enterPIN(PINcode pin)
-            throws NotValidPINException, NotAffiliatedException, ConnectException, java.net.ConnectException,
-            BadPathException {
+            throws NifNotRegisteredException, NotValidPINException, NotAffiliatedException, ConnectException,
+            BadPathException, NullPointerException {
         // el usuario introduce el PIN recibido via SMS, con objeto de completar su
         // identificacion. Esta operacion se aplica siempre en el proceso de
         // identificacion con Cl@ve PIN, pero tambien en los casos en los que se escoge
@@ -263,7 +264,16 @@ public class UnifiedPlatform {
         }
     }
 
-    private void obtainReportSelected() throws java.net.ConnectException, NotAffiliatedException, BadPathException {
+    public void selectCertificate(byte opc) {
+        // TODO Opcional
+    }
+
+    public void enterPassw(Password pas) throws NotValidPasswordException {
+        // TODO Opcional
+    }
+
+    private void obtainReportSelected() throws NotAffiliatedException, BadPathException, NullPointerException,
+            NifNotRegisteredException, ConnectException {
         if (certReport.compareTo("vida laboral") == 0) {
             pdfDoc = seguridadSS.getLaboralLife(nifdoc);
             DocPath defaultPath = new DocPath();

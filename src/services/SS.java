@@ -1,6 +1,6 @@
 package src.services;
 
-import java.net.ConnectException;
+import src.exceptions.*;
 
 import src.data.Nif;
 import src.exceptions.NotAffiliatedException;
@@ -15,5 +15,6 @@ public interface SS { // External service for Social Security Govern administrat
 
     MemberAccreditationDoc getMembAccred(Nif nif) throws NotAffiliatedException, ConnectException;
 
-    //AccredNumb getNumberAccred(Nif nif) throws NotAffiliatedException, ConnectException;
+    // AccredNumb getNumberAccred(Nif nif) throws NotAffiliatedException,
+    // ConnectException;
 }

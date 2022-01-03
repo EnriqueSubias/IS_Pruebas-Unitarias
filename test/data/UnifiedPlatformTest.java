@@ -43,7 +43,7 @@ public class UnifiedPlatformTest {
     @BeforeEach
     public void setUp() {
         this.docPath = new DocPath();
-        this.accredNumb = new AccredNumb();
+        this.accredNumb = new AccredNumb("12345678901");
         this.uni = new UnifiedPlatform();
     }
 
@@ -180,19 +180,32 @@ public class UnifiedPlatformTest {
     @DisplayName("Comprobación del NIF y PIN de Cl@ve")
     public void enterNIFandPINobtTest()
             throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
-            NullPointerException, IllegalArgumentException, IncorrectValDateException {
-
-        System.out.println("nif: " + nif);
-
-        nif = new Nif("12345678A");
-
-        System.out.println(nif);
+            NullPointerException, IncorrectValDateException {
 
         Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
 
-        uni.enterNIFandPINobt(nif, futureDate);
-
+        // uni.enterNIFandPINobt(nif, futureDate);
         // assertEquals(expected, actual);
+
+        // System.out.println(nif);
+
+        // Exception exception = assertThrows(NifNotRegisteredException.class, () ->
+        // uni.enterNIFandPINobt(nif, futureDate));
+        // String actualMessage = exception.getMessage();
+        // assertTrue(actualMessage.contains("NIF coundn't be registered in Cl@ve
+        // PIN"));
+
+        uni.selectSS();
+        uni.selectCitizens();
+        uni.selectReports();
+        uni.selectCertificationReport((byte) 1);
+        uni.selectAuthMethod((byte) 0);
+
+        Exception exception = assertThrows(NullPointerException.class, () -> uni.enterNIFandPINobt(null, null));
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains("NIF is null"));
+
+        // nif = new Nif("12345678A");
 
     }
 
