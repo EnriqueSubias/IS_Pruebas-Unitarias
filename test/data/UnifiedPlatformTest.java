@@ -48,10 +48,12 @@ public class UnifiedPlatformTest {
     }
 
     @Test
+    @DisplayName("Comprobación en la busqueda de tramites")
     public void keywordSuccessTest() throws AnyKeyWordProcedureException {
         institutionToSelect.put("vida laboral", "SS");
         institutionToSelect.put("numero seguridad social", "SS");
         institutionToSelect.put("puntos del carnet", "DGT");
+        // institutionToSelect.put("borrador de la renta", "AEAT");
 
         uni.loadDatabase(institutionToSelect);
 
@@ -63,6 +65,7 @@ public class UnifiedPlatformTest {
     }
 
     @Test
+    @DisplayName("Comprobación de errores en la busqueda de tramites")
     public void keywordFailedTest() {
 
         institutionToSelect.put("vida laboral", "SS");
@@ -81,7 +84,7 @@ public class UnifiedPlatformTest {
     }
 
     @Test
-     @DisplayName("Comprobación del tipo de ")
+    @DisplayName("Comprobación del tipo de AAPP")
     public void selectAAPPTest() {
         assertEquals(null, uni.getInstitution());
 
@@ -133,32 +136,44 @@ public class UnifiedPlatformTest {
 
     @Test
     @DisplayName("Comprobación de los trámites")
-    public void selectCertificationReportTest() {
-        // TODO
-        byte tramite0 = 0;
-        uni.selectCertificationReport(tramite0);
-        String certReport1 = uni.getCertReport();
-        System.out.println(certReport1);
+    public void selectCertificationReportTest1() {
+        assertEquals(null, uni.getCertReport());
 
-        byte tramite1 = 1;
-        uni.selectCertificationReport(tramite1);
-        String certReport2 = uni.getCertReport();
-        System.out.println(certReport2);
+        uni.selectSS();
+        assertEquals(null, uni.getCertReport());
+
+        uni.selectCitizens();
+        assertEquals(null, uni.getCertReport());
+
+        uni.selectReports();
+        assertEquals(null, uni.getCertReport());
+
+        uni.selectCertificationReport((byte) 0);
+        assertEquals("vida laboral", uni.getCertReport());
+
+        uni.selectCertificationReport((byte) 1);
+        assertEquals("numero seguridad social", uni.getCertReport());
     }
 
     @Test
     @DisplayName("Comprobación de la selección de autentificación")
     public void selectAuthMethodTest() {
-        // TODO
-        byte aut0 = 0;
-        uni.selectAuthMethod(aut0);
-        String authentication1 = uni.getAuthentication();
-        System.out.println(authentication1);
+        assertEquals(null, uni.getAuthentication());
 
-        byte aut1 = 1;
-        uni.selectAuthMethod(aut1);
-        String authentication2 = uni.getAuthentication();
-        System.out.println(authentication2);
+        uni.selectSS();
+        assertEquals(null, uni.getAuthentication());
+
+        uni.selectCitizens();
+        assertEquals(null, uni.getAuthentication());
+
+        uni.selectReports();
+        assertEquals(null, uni.getAuthentication());
+
+        uni.selectCertificationReport((byte) 1);
+        assertEquals(null, uni.getAuthentication());
+
+        uni.selectAuthMethod((byte) 0);
+        assertEquals("Cl@ve PIN", uni.getAuthentication());
     }
 
     @Test

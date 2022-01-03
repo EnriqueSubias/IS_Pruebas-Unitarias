@@ -22,18 +22,19 @@ import java.util.Date;
 
 import java.util.HashMap;
 
-public class UnifiedPlatform { // implements CertificationAuthority {
+public class UnifiedPlatform {
 
     // The class members
 
     // Input events
 
     String[] instituciones = { "SS", "AEAT", "DGT", "MJ" };
-    String[] tramites = { "vida laboral", "numero seguridad social" };
+    String[] tramites;// = { "vida laboral", "numero seguridad social" };
 
     String[] persona = { "persona fisica", "persona juridica" };
     String[] autMethod = { "Cl@ve PIN", "Cl@ve Permanente", "certificado digital" };
 
+    // Variables para indicar lo que se ha seleccionado, por defecto son null
     String institution;
     String personType;
     String certReport;
@@ -45,7 +46,7 @@ public class UnifiedPlatform { // implements CertificationAuthority {
 
     CertificationAuthority ca;
     SS seguridadSS;
-    MemberAccreditationDoc MemberAccred;
+    MemberAccreditationDoc memberAccred;
     AccredNumb accNumber;
     PDFDocument pdfDoc;
 
@@ -87,6 +88,7 @@ public class UnifiedPlatform { // implements CertificationAuthority {
     public void selectSS() {
         // Evento que emula la accion de clicar en la seccion SS en el mosaico inicial.
         institution = "SS";
+        tramites = new String[2];
         tramites[0] = "vida laboral";
         tramites[1] = "numero seguridad social";
         // String institutionToSelect = "SS";
@@ -101,17 +103,20 @@ public class UnifiedPlatform { // implements CertificationAuthority {
 
     public void selectAEAT() {
         institution = "AEAT";
+        tramites = new String[2];
         tramites[0] = "obtener datos fiscales";
         tramites[1] = "borrador de la renta";
     }
 
     public void selectMJ() {
         institution = "MJ";
+        tramites = new String[1];
         tramites[0] = "solicitar el certificado de nacimiento";
     }
 
     public void selectDGT() {
         institution = "DGT";
+        tramites = new String[1];
         tramites[0] = "puntos del carnet";
     }
 
@@ -245,8 +250,8 @@ public class UnifiedPlatform { // implements CertificationAuthority {
             // this.pindoc = new PINcode(pin.getPin());
             // this.MA = MemberAccreditationDoc(seguridadSS.getMembAccred(nifdoc)) {
             if (ca.checkPIN(nifdoc, pin)) {
-                MemberAccred = seguridadSS.getMembAccred(nifdoc);
-                if (MemberAccred == null) {
+                memberAccred = seguridadSS.getMembAccred(nifdoc);
+                if (memberAccred == null) {
                     throw new NotAffiliatedException();
                 } else {
                     // System.out.println("PIN valido");
@@ -292,7 +297,8 @@ public class UnifiedPlatform { // implements CertificationAuthority {
     // Other operations
     private String searchKeyWords(String keyWord) throws AnyKeyWordProcedureException {
         if (database.containsKey(keyWord)) {
-            return new String(database.get(keyWord));
+            String aux = database.get(keyWord);
+            return aux;
         } else {
             throw new AnyKeyWordProcedureException();
         }
@@ -313,7 +319,8 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         System.out.println("PDF enviado para descargar a" + path.toString());
     }
 
-    public void loadDatabase(HashMap<String, String> databaseP) { // TODO poner como boolean
+    public void loadDatabase(HashMap<String, String> databaseP) {
+        // TODO poner como boolean
         this.database = databaseP;
     }
 
