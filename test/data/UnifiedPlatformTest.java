@@ -54,14 +54,14 @@ public class UnifiedPlatformTest {
 
         uni.loadDatabase(institutionToSelect);
 
-        String keyWordSuccess1 = "SS";
-        String keyWordSuccess2 = "DGT";
+        String expectedInstitution1 = "SS";
+        String expectedInstitution2 = "DGT";
 
         uni.enterKeyWords("vida laboral");
-        assertEquals(keyWordSuccess1, uni.getInstitution());
+        assertEquals(expectedInstitution1, uni.getInstitution());
 
         uni.enterKeyWords("puntos del carnet");
-        assertEquals(keyWordSuccess2, uni.getInstitution());
+        assertEquals(expectedInstitution2, uni.getInstitution());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class UnifiedPlatformTest {
         uni.loadDatabase(institutionToSelect);
 
         String keyWordFailed1 = "";
-        String keyWordFailed2 = "OADF";
+        String keyWordFailed2 = "numero";
 
         Exception exception1 = assertThrows(AnyKeyWordProcedureException.class,
                 () -> uni.enterKeyWords(keyWordFailed1));
@@ -86,13 +86,85 @@ public class UnifiedPlatformTest {
     }
 
     @Test
+    public void selectAAPPTest() {
+        // TODO
+        assertEquals(null, uni.getInstitution());
+        // Seleccionar tramite y luego:
+        //assertEquals("null", uni.getTramites());
+        
+        uni.selectSS();
+        assertEquals("SS", uni.getInstitution());
+
+        uni.selectAEAT();
+        assertEquals("AEAT", uni.getInstitution());
+        // Seleccionar tramite y luego:
+        //assertEquals("", uni.getTramites());
+
+        uni.selectSS();
+        assertEquals("SS", uni.getInstitution());
+
+
+
+    }
+    
+    @Test
+    public void selectPersonTypeTest() {
+        // TODO
+        
+    }
+    
+    @Test
+    public void selectReportsTest() {
+        // TODO
+        uni.selectReports();
+        String report = uni.getReport();
+        System.out.println(report);
+    }
+    
+    @Test
+    public void selectCertificationReportTest() {
+        // TODO
+        byte tramite0 = 0;
+        uni.selectCertificationReport(tramite0);
+        String certReport1 = uni.getCertReport();
+        System.out.println(certReport1);
+
+        byte tramite1 = 1;
+        uni.selectCertificationReport(tramite1);
+        String certReport2 = uni.getCertReport();
+        System.out.println(certReport2);
+    }
+
+    @Test
+    public void selectAuthMethodTest() {
+        // TODO
+        byte aut0 = 0;
+        uni.selectAuthMethod(aut0);
+        String authentication1 = uni.getAuthentication();
+        System.out.println(authentication1);
+
+        byte aut1 = 1;
+        uni.selectAuthMethod(aut1);
+        String authentication2 = uni.getAuthentication();
+        System.out.println(authentication2);
+    }
+
+    @Test
     public void enterNIFandPINobtTest()
             throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
             NullPointerException, IllegalArgumentException, IncorrectValDateException {
+        
+        System.out.println("nif: " + nif);
+        
+        nif = new Nif("12345678A");
+        
+        System.out.println(nif);
+        
         Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
 
         uni.enterNIFandPINobt(nif, futureDate);
-        //assertEquals(expected, actual);
+        
+        // assertEquals(expected, actual);
 
     }
 

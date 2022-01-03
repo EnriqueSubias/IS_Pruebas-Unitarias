@@ -45,13 +45,13 @@ public class UnifiedPlatform { // implements CertificationAuthority {
 
     CertificationAuthority ca;
     SS seguridadSS;
-    MemberAccreditationDoc ma;
+    MemberAccreditationDoc MemberAccred;
     AccredNumb accNumber;
     PDFDocument pdfDoc;
 
     HashMap<String, String> database;
 
-    public void processSearcher() {
+    public void processSearcher() throws AnyKeyWordProcedureException {
         // se procede a utilizar el buscador de tramites. Este evento emula la accion de
         // clicar en el buscador para desplegar el campo de texto en el que introducir
         // la o las palabras clave.
@@ -59,11 +59,12 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         System.out.println("Introduce el tramite a buscar: ");
         try (Scanner sc = new Scanner(System.in)) {
             String keyWord = sc.nextLine();
-            try {
-                enterKeyWords(keyWord);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            enterKeyWords(keyWord);
+            // try {
+            // enterKeyWords(keyWord);
+            // } catch (Exception ex) {
+            // ex.printStackTrace();
+            // }
         }
     }
 
@@ -114,6 +115,14 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         tramites[0] = "puntos del carnet";
     }
 
+    public String getInstitution() {
+        return institution;
+    }
+
+    // public String[] getTramites() {
+    // return tramites;
+    // }
+
     public void selectCitizens() {
         // Evento que emula la accion de clicar el enlace 'Ciudadanos', en la SS
         // String personTypeToSelect = "persona fisica";
@@ -133,6 +142,10 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         }
     }
 
+    public String getPersonType() {
+        return personType;
+    }
+
     public void selectReports() {
         // Clicar el enlace 'Informes y certificados', en 'Ciudadanos' de la SS
         // String reportToSelect = "Informes y certificados";
@@ -142,6 +155,10 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         }
         // byte option = 0;
         // selectCertificationReport(option);
+    }
+
+    public String getReport() {
+        return report;
     }
 
     public void selectCertificationReport(byte opc) {
@@ -163,6 +180,10 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         }
     }
 
+    public String getCertReport() {
+        return certReport;
+    }
+
     public void selectAuthMethod(byte opc) {
         if (institution != null && personType != null && report != null && certReport != null) {
             // if (opc == 0) {
@@ -178,6 +199,10 @@ public class UnifiedPlatform { // implements CertificationAuthority {
                 authentication = autMethod[opc];
             }
         }
+    }
+
+    public String getAuthentication() {
+        return authentication;
     }
 
     public void enterNIFandPINobt(Nif nif, Date valDate) throws NifNotRegisteredException,
@@ -206,7 +231,8 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         }
     }
 
-    public void enterPIN(PINcode pin) throws NotValidPINException, NotAffiliatedException, ConnectException {
+    public void enterPIN(PINcode pin)
+            throws NotValidPINException, NotAffiliatedException, ConnectException, java.net.ConnectException {
         // el usuario introduce el PIN recibido via SMS, con objeto de completar su
         // identificacion. Esta operacion se aplica siempre en el proceso de
         // identificacion con Cl@ve PIN, pero tambien en los casos en los que se escoge
@@ -217,11 +243,22 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         // this.pindoc = new PINcode(pin.getPin());
         // this.MA = MemberAccreditationDoc(seguridadSS.getMembAccred(nifdoc)) {
         if (ca.checkPIN(nifdoc, pin)) {
-            if (accNumber == null) {
-                throw new NotAffiliatedException(); // TODO Revisar si es correcto que este aqui
+            MemberAccred = seguridadSS.getMembAccred(nifdoc);
+            if (MemberAccred == null) {
+                throw new NotAffiliatedException();
+            } else {
+                // System.out.println("PIN valido");
+                if (certReport.compareTo("vida laboral") == 0) {
+                    loadPdfLaboralLife();
+                }
             }
-            System.out.println("PIN valido");
+        } else {
+            throw new NotValidPINException();
         }
+    }
+
+    private void loadPdfLaboralLife() throws java.net.ConnectException, NotAffiliatedException {
+        pdfDoc = seguridadSS.getLaboralLife(nifdoc);
     }
 
     private void printDocument() throws BadPathException, PrintingException {
@@ -236,7 +273,6 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         // implementacion.
         downloadDocument(pdfDoc.getPath());
         System.out.println("PDF descargado");
-
     }
 
     private void selectPath(DocPath path) throws BadPathException {
@@ -272,10 +308,6 @@ public class UnifiedPlatform { // implements CertificationAuthority {
 
     public void loadDatabase(HashMap<String, String> databaseP) { // TODO poner como boolean
         this.database = databaseP;
-    }
-
-    public String getInstitution() {
-        return institution;
     }
 
     // @Override

@@ -18,6 +18,7 @@ public interface CertificationAuthority { // External service that represents th
     // compartida
     boolean checkPIN(Nif nif, PINcode pin) throws NotValidPINException, ConnectException;
 
+
     byte ckeckCredent(Nif nif, Password passw)
             throws NifNotRegisteredException, NotValidCredException, AnyMobileRegisteredException,
             ConnectException;
