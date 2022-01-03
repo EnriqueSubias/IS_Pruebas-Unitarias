@@ -250,7 +250,7 @@ public class UnifiedPlatform { // implements CertificationAuthority {
                     throw new NotAffiliatedException();
                 } else {
                     // System.out.println("PIN valido");
-                    obtaineReportSelected();
+                    obtainReportSelected();
                 }
             } else {
                 throw new NotValidPINException();
@@ -258,11 +258,12 @@ public class UnifiedPlatform { // implements CertificationAuthority {
         }
     }
 
-    private void obtaineReportSelected() throws java.net.ConnectException, NotAffiliatedException, BadPathException {
+    private void obtainReportSelected() throws java.net.ConnectException, NotAffiliatedException, BadPathException {
         if (certReport.compareTo("vida laboral") == 0) {
             pdfDoc = seguridadSS.getLaboralLife(nifdoc);
             DocPath defaultPath = new DocPath();
             defaultPath.addDocPath("/tmp/laboralLife" + nifdoc.getNif());
+            pdfDoc.moveDoc(defaultPath);
             OpenDocument(defaultPath);
         }
     }
@@ -315,33 +316,6 @@ public class UnifiedPlatform { // implements CertificationAuthority {
     public void loadDatabase(HashMap<String, String> databaseP) { // TODO poner como boolean
         this.database = databaseP;
     }
-
-    // @Override
-    // public boolean sendPIN(Nif nif, Date vaID) { // throws
-    // NifNotRegisteredException, IncorrectValDateException,
-    // // AnyMobileRegisteredException, ConnectException {
-    // try {
-    // pinSMS = new PINcode("842");
-    // } finally {
-    // System.out.println("SMS enviado correctamente");
-    // }
-    // return true;
-    // }
-
-    // @Override
-    // public boolean checkPIN(Nif nif, PINcode pin) throws NotValidPINException,
-    // ConnectException {
-    // // TODO Auto-generated method stub
-    // return false;
-    // }
-
-    // @Override
-    // public byte ckeckCredent(Nif nif, Password passw)
-    // throws NifNotRegisteredException, NotValidCredException,
-    // AnyMobileRegisteredException, ConnectException {
-    // // TODO Auto-generated method stub
-    // return 0;
-    // }
 
     // Possibly more operations
 }

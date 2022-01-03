@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Validate;
 
@@ -54,14 +55,11 @@ public class UnifiedPlatformTest {
 
         uni.loadDatabase(institutionToSelect);
 
-        String expectedInstitution1 = "SS";
-        String expectedInstitution2 = "DGT";
-
         uni.enterKeyWords("vida laboral");
-        assertEquals(expectedInstitution1, uni.getInstitution());
+        assertEquals("SS", uni.getInstitution());
 
         uni.enterKeyWords("puntos del carnet");
-        assertEquals(expectedInstitution2, uni.getInstitution());
+        assertEquals("DGT", uni.getInstitution());
     }
 
     @Test
@@ -71,21 +69,19 @@ public class UnifiedPlatformTest {
         institutionToSelect.put("numero seguridad social", "SS");
         uni.loadDatabase(institutionToSelect);
 
-        String keyWordFailed1 = "";
-        String keyWordFailed2 = "numero";
-
         Exception exception1 = assertThrows(AnyKeyWordProcedureException.class,
-                () -> uni.enterKeyWords(keyWordFailed1));
+                () -> uni.enterKeyWords(""));
         String actualMessage1 = exception1.getMessage();
         assertTrue(actualMessage1.contains("Tramite no encontrado"));
 
         Exception exception2 = assertThrows(AnyKeyWordProcedureException.class,
-                () -> uni.enterKeyWords(keyWordFailed2));
+                () -> uni.enterKeyWords("numero"));
         String actualMessage2 = exception2.getMessage();
         assertTrue(actualMessage2.contains("Tramite no encontrado"));
     }
 
     @Test
+     @DisplayName("Comprobación del tipo de ")
     public void selectAAPPTest() {
         assertEquals(null, uni.getInstitution());
 
@@ -100,6 +96,7 @@ public class UnifiedPlatformTest {
     }
 
     @Test
+    @DisplayName("Comprobación de si es persona fisica o juridica")
     public void selectPersonTypeTest() {
         uni.selectCitizens();
         assertEquals(null, uni.getPersonType());
@@ -117,14 +114,25 @@ public class UnifiedPlatformTest {
     }
 
     @Test
+    @DisplayName("Comprobación de errores de selección de trámites")
     public void selectReportsTest() {
-        // TODO
+        assertEquals(null, uni.getReport());
+
+        uni.selectSS();
+        assertEquals(null, uni.getReport());
+
+        uni.selectCitizens();
+        assertEquals(null, uni.getReport());
+
         uni.selectReports();
-        String report = uni.getReport();
-        System.out.println(report);
+        assertEquals("informes y certificados", uni.getReport());
+
+        uni.selectDGT();
+        assertEquals("informes y certificados", uni.getReport());
     }
 
     @Test
+    @DisplayName("Comprobación de los trámites")
     public void selectCertificationReportTest() {
         // TODO
         byte tramite0 = 0;
@@ -139,6 +147,7 @@ public class UnifiedPlatformTest {
     }
 
     @Test
+    @DisplayName("Comprobación de la selección de autentificación")
     public void selectAuthMethodTest() {
         // TODO
         byte aut0 = 0;
@@ -153,6 +162,7 @@ public class UnifiedPlatformTest {
     }
 
     @Test
+    @DisplayName("Comprobación del NIF y PIN de Cl@ve")
     public void enterNIFandPINobtTest()
             throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
             NullPointerException, IllegalArgumentException, IncorrectValDateException {
@@ -184,6 +194,7 @@ public class UnifiedPlatformTest {
     // }
 
     @Test
+    @DisplayName("Comprobacion de la fecha de validez del NIF")
     public void dateValidTest() throws IncorrectValDateException {
         Date pastDate = Date.from((new java.util.Date()).toInstant().minusSeconds(1576800000));
         Exception exception = assertThrows(IncorrectValDateException.class, () -> uni.dateValid(pastDate));
