@@ -2,7 +2,7 @@ package src.services;
 
 import src.data.*;
 
-public interface sistemaClave_interface {
+public interface sistemaClaveInterface {
 
     boolean checkPIN(Nif nif, PINcode pin);
 }

@@ -20,8 +20,7 @@ public class PDFDocument { // Represents a PDF document
 
     public PDFDocument(Date creatDate, DocPath path, File file)
             throws NullValDateException, NullPathException, NullFileException {
-        // Initializes attributes and emulates the document
-        // download at a default path
+        // Initializes attributes and emulates the document download to the default path
         if (creatDate == null) {
             throw new NullValDateException();
         }
@@ -66,9 +65,7 @@ public class PDFDocument { // Represents a PDF document
     }
 
     public void moveDoc(DocPath destPath) throws BadPathException, NullPathException {
-        // Moves the document to the
-        // destination path
-        // indicated
+        // Moves the document to the destination path indicated
         if (destPath == null) {
             throw new NullPathException();
         }
@@ -84,8 +81,7 @@ public class PDFDocument { // Represents a PDF document
     }
 
     public void openDoc(DocPath path) throws BadPathException, NullPathException {
-        // Opens the document at the path
-        // indicated
+        // Opens the document at the indicated path
         if (path == null) {
             throw new NullPathException();
         }

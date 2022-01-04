@@ -41,7 +41,7 @@ public final class Password {
                 this.password = password;
             } else {
                 throw new NotValidPasswordException();
-                // it must contain lower and upper case letters and digits
+                // It must contain lower and upper case letters and digits
             }
         }
     }

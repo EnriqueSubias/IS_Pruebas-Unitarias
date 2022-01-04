@@ -23,10 +23,8 @@ public class PDFDocumentTest {
     @Test
     @DisplayName("PdfDocument Creattion test")
     public void pdfDocumentCreationTest() {
-        // Date creatDate;
         DocPath path;
         File file;
-        // Date createDate = new Date();
         Calendar cal = Calendar.getInstance();
         cal.set(2018, Calendar.JANUARY, 10); // Year, month and day of month
         Date createDate = cal.getTime();
@@ -36,13 +34,6 @@ public class PDFDocumentTest {
         assertThrows(NullPathException.class, () -> this.pdfDoc = new PDFDocument(createDate, null, null));
         assertThrows(NullFileException.class, () -> this.pdfDoc = new PDFDocument(createDate, path, null));
         assertDoesNotThrow(() -> new PDFDocument(createDate, path, file));
-        /*
-         * assertThrows(NotValidPasswordException.class,
-         * () -> this.pass = new
-         * Password("ThisPasswordMayBeTooLongForThePasswordRequiements"));
-         * assertDoesNotThrow(() -> this.pass = new Password("Holas123"));
-         * assertEquals("Holas123", this.pass.getPassword());
-         */
     }
 
     @Test
@@ -61,40 +52,42 @@ public class PDFDocumentTest {
         assertEquals(path, pdfDoc.getPath());
     }
 
+    // Estos 2 test solo funcionan poniendo la ruta completa del archivo testPdf.pdf
+    /*
     @Test
     @DisplayName("moveDoc Test PDFDocument")
     public void moveDocTest() throws NullPathException, NullValDateException, NullFileException {
         Date createDate = new Date();
         DocPath destPath = new DocPath();
-        destPath.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/a.txt");
-        File file = new File("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/services/a.txt");
-
+        destPath.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/testPdf.pdf");
+        File file = new File("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/services/testPdf.pdf");
+    
         this.pdfDoc = new PDFDocument(createDate, destPath, file);
         assertThrows(NullPathException.class, () -> pdfDoc.moveDoc(null));
         assertDoesNotThrow(() -> pdfDoc.moveDoc(destPath));
         assertFalse(file.exists());
-
+    
         DocPath destPath2 = new DocPath();
-        destPath2.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/services/a.txt");
-        File file2 = new File("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/a.txt");
+        destPath2.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/services/testPdf.pdf");
+        File file2 = new File("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/testPdf.pdf");
         this.pdfDoc = new PDFDocument(createDate, destPath2, file2);
         assertDoesNotThrow(() -> pdfDoc.moveDoc(destPath2));
         assertTrue(file.exists());
     }
-
+    
     @Test
     @DisplayName("openDoc Test PDFDocument")
     public void openDocTest() throws NullPathException, NullValDateException, NullFileException {
         Date createDate = new Date();
         DocPath path = new DocPath();
-        path.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/services/a.txt");
+        path.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/services/testPdf.pdf");
         File file = new File("");
         this.pdfDoc = new PDFDocument(createDate, path, file);
         assertThrows(NullPathException.class, () -> pdfDoc.openDoc(null));
         DocPath badPath = new DocPath();
-        badPath.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/a.txt");
+        badPath.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/testPdf.pdf");
         assertThrows(BadPathException.class, () -> pdfDoc.openDoc(badPath));
         assertDoesNotThrow(() -> pdfDoc.openDoc(path));
     }
-
+    */
 }

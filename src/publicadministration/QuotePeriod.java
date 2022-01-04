@@ -42,19 +42,17 @@ public class QuotePeriod { // Represents a quote period as a registered worker
     }
 
     // the getters
-    public Date getInitDay(){
+    public Date getInitDay() {
         return this.initDay;
     }
 
-    public int getNDays(){
+    public int getNDays() {
         return this.numDays;
     }
 
     @Override
     public String toString() { // converts to String
         return "Data: " + this.initDay.toString() + " Num Days: " + this.numDays;
-        // return "initDay{" + "fecha inicial='" + this.initDay.toString() + '\'' + '}'
-        // + "numDays{" + "numero de dias='" + this.numDays + '\'' + '}'
     }
 
 }

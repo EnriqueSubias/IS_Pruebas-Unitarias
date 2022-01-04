@@ -12,10 +12,8 @@ public class MemberAccreditationDoc extends PDFDocument { // Represents the memb
     private Nif nif;
     private AccredNumb nAff;
 
-    public MemberAccreditationDoc(Nif nif, AccredNumb nAff) // Date creatDate, DocPath path, File file,
-            throws NullNifException, NullAccredNumberException { // Initializes
-        // attributes
-        // super(creatDate, path, file);
+    public MemberAccreditationDoc(Nif nif, AccredNumb nAff)
+            throws NullNifException, NullAccredNumberException { // Initializes attributes
         if (nif == null) {
             throw new NullNifException();
         }

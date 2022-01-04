@@ -14,6 +14,5 @@ public interface SS { // External service for Social Security Govern administrat
 
     MemberAccreditationDoc getMembAccred(Nif nif) throws NotAffiliatedException, ConnectException, NullNifException, NullAccredNumberException, NullValDateException, NullPathException, NullFileException;
 
-    // AccredNumb getNumberAccred(Nif nif) throws NotAffiliatedException,
-    // ConnectException;
+    // AccredNumb getNumberAccred(Nif nif) throws NotAffiliatedException, ConnectException;
 }

@@ -8,7 +8,6 @@ import src.exceptions.*;
 
 public final class AccredNumb {
     // Number of affiliation to the Social Security.
-    // hemos quitado final de ssNumber
     private String ssNumber; // 11 digits length
 
     public AccredNumb(String code) throws NotValidAccredNumberException, NullAccredNumberException{

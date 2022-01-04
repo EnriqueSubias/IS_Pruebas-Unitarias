@@ -49,27 +49,22 @@ public class SSDobleImplementesTest implements SS {
         Nif user1 = new Nif("12345678A");
         Nif user2 = new Nif("12345678B");
         Nif user3 = new Nif("12345678C");
-        // Nif user4 = new Nif("12345678D");
         AccredNumb accUser1 = new AccredNumb("12345678901");
         AccredNumb accUser2 = new AccredNumb("12345678902");
         AccredNumb accUser3 = new AccredNumb("12345678903");
-        // AccredNumb accUser4 = new AccredNumb("12345678904");
         databaseAccred.put(user1, accUser1);
         databaseAccred.put(user2, accUser2);
         databaseAccred.put(user3, accUser3);
-        // databaseAccred.put(user4, accUser4);
         Calendar cal = Calendar.getInstance();
         cal.set(2018, Calendar.JANUARY, 10); // Year, month and day of month
         Date date1 = cal.getTime();
         cal.set(2005, Calendar.JANUARY, 7); // Year, month and day of month
         Date date2 = cal.getTime();
         cal.set(2010, Calendar.JANUARY, 26); // Year, month and day of month
-        // Date date3 = cal.getTime();
         cal.set(2021, Calendar.JANUARY, 1); // Year, month and day of month
         Date date4 = cal.getTime();
         QuotePeriod period1 = new QuotePeriod(date1, 400);
         QuotePeriod period2 = new QuotePeriod(date2, 250);
-        // QuotePeriod period3 = new QuotePeriod(date3, 100);
         QuotePeriod period4 = new QuotePeriod(date4, 60);
         QuotePeriodsColl totalPeriods1 = new QuotePeriodsColl();
         totalPeriods1.addQuotePeriod(period2);

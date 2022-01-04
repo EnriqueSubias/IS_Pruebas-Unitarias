@@ -49,25 +49,14 @@ public class UnifiedPlatform {
     }
 
     public void processSearcher() throws AnyKeyWordProcedureException {
-        // se procede a utilizar el buscador de tramites. Este evento emula la accion de
-        // clicar en el buscador para desplegar el campo de texto en el que introducir
-        // la o las palabras clave.
-
         System.out.println("Introduce el tramite a buscar: ");
         try (Scanner sc = new Scanner(System.in)) {
             String keyWord = sc.nextLine();
             enterKeyWords(keyWord);
-            // try {
-            // enterKeyWords(keyWord);
-            // } catch (Exception ex) {
-            // ex.printStackTrace();
-            // }
         }
     }
 
     public void enterKeyWords(String keyWord) throws AnyKeyWordProcedureException {
-        // se introduce/n la/s palabra/s clave en el buscador de tramites. Obtiene la
-        // AAPP responsable de ese tramite y la muestra por pantalla.
         System.out.println("Buscando AAPP...");
         institution = searchKeyWords(keyWord);
 
@@ -76,25 +65,14 @@ public class UnifiedPlatform {
             selectSS();
         } else if (institution.compareTo("AEAT") == 0) {
             System.out.println("AEAT");
-            // selectAEAT();
         }
-        // throw AnyKeyWordProcedureException();
     }
 
     public void selectSS() {
-        // Evento que emula la accion de clicar en la seccion SS en el mosaico inicial.
         institution = "SS";
         tramites = new String[2];
         tramites[0] = "vida laboral";
         tramites[1] = "numero seguridad social";
-        // String institutionToSelect = "SS";
-        // for (int i = 0; i < instituciones.length; i++) {
-        // if (institutionToSelect.compareTo(instituciones[i]) == 0) {
-        // institution = instituciones[i];
-        // System.out.println("SS Seleccionada");
-        // break;
-        // }
-        // }
     }
 
     public void selectAEAT() {
@@ -121,16 +99,9 @@ public class UnifiedPlatform {
     }
 
     public void selectCitizens() {
-        // Evento que emula la accion de clicar el enlace 'Ciudadanos', en la SS
-        // String personTypeToSelect = "persona fisica";
         if (institution != null) { // Precondiciones
-            // for (int i = 0; i < persona.length; i++) {
-            // if (persona[i].compareTo(personTypeToSelect) == 0) {
             personType = "persona fisica";
-            // }
-            // }
-            // System.out.println("Persona fisica Seleccionado");
-        } // selectReports();
+        }
     }
 
     public void selectBusiness() {
@@ -144,7 +115,6 @@ public class UnifiedPlatform {
     }
 
     public void selectReports() {
-        // Clicar el enlace 'Informes y certificados', en 'Ciudadanos' de la SS
         if (institution != null && institution.compareTo("SS") == 0 && personType != null
                 && personType.compareTo("persona fisica") == 0) { // Precondiciones
             report = "informes y certificados";
@@ -157,17 +127,9 @@ public class UnifiedPlatform {
     }
 
     public void selectCertificationReport(byte opc) {
-        // evento que emula la accion de seleccionar el informe o certificado concreto
-        // que se desea obtener, tras presentar un menu con las dos opciones
-        // disponibles. Utilizaremos un byte para indicar de que informe se trata.
         if (institution != null && institution.compareTo("SS") == 0 && personType != null
                 && personType.compareTo("persona fisica") == 0 && report != null
                 && report.compareTo("informes y certificados") == 0) { // Precondiciones
-            // if (opc == 0) {
-            // // pdfDoc = new LaboralLifeDoc();
-            // } else if (opc == 1) {
-            // // pdfDoc = new MemberAccreditationDoc();
-            // }
             if (opc >= 0 && opc < tramites.length) {
                 certReport = tramites[opc];
             }
@@ -179,16 +141,7 @@ public class UnifiedPlatform {
     }
 
     public void selectAuthMethod(byte opc) {
-        if (institution != null && personType != null && report != null && certReport != null) {
-            // if (opc == 0) {
-            // // Cl@ve PIN
-            // authentication = autMethod[opc];
-            // System.out.println("Cl@ve PIN Seleccionada");
-            // } else if (opc == 1) {
-            // // certificado digital
-            // authentication = autMethod[opc];
-            // System.out.println("certificado digital Seleccionado");
-            // }
+        if (institution != null && personType != null && report != null && certReport != null) { // Preconditions
             if (opc >= 0 && opc < autMethod.length) {
                 authentication = autMethod[opc];
             }
@@ -203,9 +156,6 @@ public class UnifiedPlatform {
             throws AnyMobileRegisteredException, ConnectException,
             IncorrectValDateException, NullValDateException, NifNotRegisteredException, NullNifException,
             NullPinException, NotValidPINException {
-        // transmetre les dades del ciutadà que l’acrediten en Cl@ve PIN,
-        // i sol·licitud del PIN per a la realització d’un tràmit,
-        // via connexió amb l’autoritat de certificació responsable
 
         if (institution != null && personType != null && certReport != null && authentication != null
                 && authentication.equals("Cl@ve PIN")) { // Preconditions
@@ -233,7 +183,6 @@ public class UnifiedPlatform {
             throw new NullPasswordException();
         }
         if (dateValid(valDate)) {
-            // if (ca.ckeckCredent(nif, pass)) {
             byte roforzada = ca.ckeckCredent(nif, pass);
             if (roforzada == 1) {
                 ca.sendPIN(nif, valDate);
@@ -273,7 +222,7 @@ public class UnifiedPlatform {
                     if (memberAccred == null) {
                         throw new NotAffiliatedException();
                     } else {
-                        // System.out.println("PIN valido");
+                        System.out.println("PIN valido");
                         obtainReportSelected();
                     }
                 } else {
@@ -306,22 +255,19 @@ public class UnifiedPlatform {
     }
 
     private void printDocument() throws BadPathException, PrintingException, NullPathException {
-        // El usuario lanza la orden de imprimir el documento. No se pide su
-        // implementacion.
+        // No se pide su implementacion.
         printDocument(pdfDoc.getPath());
         System.out.println("PDF impreso");
     }
 
     private void downloadDocument() throws BadPathException, NullPathException {
-        // El usuario lanza la orden de descargar el documento. No se pide su
-        // implementacion.
+        // No se pide su implementacion.
         downloadDocument(pdfDoc.getPath());
         System.out.println("PDF descargado");
     }
 
     private void selectPath(DocPath path) throws BadPathException, NullPathException {
-        // El usuario escoge la ruta en la que guardar el documento. No se pide su
-        // implementacion.
+        // No se pide su implementacion.
         pdfDoc.moveDoc(path);
         System.out.println("Ruta seleccionada");
     }
@@ -359,15 +305,3 @@ public class UnifiedPlatform {
 
     // Possibly more operations
 }
-
-// Notas:
-// Es el controlador del caso de uso, tenemos que simular que todo lo del DSS se
-// haga correctamente
-
-// Mostrar mensajes por cada paso del DSS
-
-// Ojo: Un metodo de test por cada metodo NO es valido
-
-// Hay que hacer un metodo de test por cada parte relevante del caso de uso, y
-// tendran que ir en orden, para hacer un test habra que haber hecho los
-// anteriores

@@ -9,18 +9,8 @@ public class LaboralLifeDoc extends PDFDocument { // Represents the laboral life
     private Nif nif;
     private QuotePeriodsColl quotePds;
 
-    public LaboralLifeDoc(Nif nif, QuotePeriodsColl qtP) throws NoSuchPeriodException, NifNotRegisteredException { // Initializes
-                                                                                                                   // attributes
-        // if (nif != null) {
-        // if (qtP != null) {
-        // this.nif = nif;
-        // this.quotePds = qtP;
-        // } else {
-        // throw new NoSuchPeriodException();
-        // }
-        // } else {
-        // throw new NifNotRegisteredException();
-        // }
+    public LaboralLifeDoc(Nif nif, QuotePeriodsColl qtP)
+            throws NoSuchPeriodException, NifNotRegisteredException { // Initializes attributes
 
         if (nif == null) {
             throw new NifNotRegisteredException();
