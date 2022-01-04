@@ -209,7 +209,7 @@ public class UnifiedPlatformTest {
             throws NifNotRegisteredException, NullPinException, NotValidPINException, NotAffiliatedException,
             ConnectException, BadPathException, AnyMobileRegisteredException, IncorrectValDateException,
             NullValDateException, NullNifException, NullPointerException, NullPathException,
-            NotValidNifException {
+            NotValidNifException, NullAccredNumberException, NullFileException {
 
         uni.selectSS();
         uni.selectCitizens();

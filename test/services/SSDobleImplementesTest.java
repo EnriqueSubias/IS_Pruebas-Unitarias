@@ -24,7 +24,8 @@ public class SSDobleImplementesTest implements SS {
 
     @Override
     @DisplayName("Comprobación de que está afiliado en la SS")
-    public MemberAccreditationDoc getMembAccred(Nif nif) throws NotAffiliatedException, ConnectException {
+    public MemberAccreditationDoc getMembAccred(Nif nif) throws NotAffiliatedException, NullNifException,
+            NullAccredNumberException, NullValDateException, NullPathException, NullFileException {
         // TODO Auto-generated method stub
 
         if (databaseAccred.containsKey(nif)) {

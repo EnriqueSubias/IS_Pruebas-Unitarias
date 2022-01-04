@@ -16,18 +16,16 @@ public class LaboralLifeDoc extends PDFDocument { // Represents the laboral life
 
     // the getters
     public Nif getNif() throws NifNotRegisteredException {
-        if (this.nif != null) {
-            return this.nif;
-        } else {
+        if (this.nif == null) {
             throw new NifNotRegisteredException();
         }
+        return this.nif;
     }
 
     public QuotePeriodsColl getQuotePds() throws NoSuchPeriodException {
-        if (this.quotePds != null) {
-            return this.quotePds;
-        } else {
+        if (this.quotePds == null) {
             throw new NoSuchPeriodException();
         }
+        return this.quotePds;
     }
 }

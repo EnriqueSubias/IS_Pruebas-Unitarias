@@ -260,7 +260,8 @@ public class UnifiedPlatform {
 
     public void enterPIN(PINcode pin)
             throws NotValidNifException, NullPinException, NotAffiliatedException, ConnectException,
-            BadPathException, NullPointerException, NullPathException {
+            BadPathException, NullPointerException, NullPathException, NullNifException, NullAccredNumberException,
+            NullValDateException, NullFileException {
         // el usuario introduce el PIN recibido via SMS, con objeto de completar su
         // identificacion. Esta operacion se aplica siempre en el proceso de
         // identificacion con Cl@ve PIN, pero tambien en los casos en los que se escoge
