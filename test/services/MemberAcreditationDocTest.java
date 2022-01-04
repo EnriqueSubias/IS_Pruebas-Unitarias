@@ -28,34 +28,33 @@ public class MemberAcreditationDocTest {
     // // TODO falta comprobar test
     // @Test
     // public void getNullNifTest() {
-    //     assertNull(memAcred.getNif());
+    // assertNull(memAcred.getNif());
     // }
 
     // // TODO falta comprobar test
     // @Test
     // public void getNullAcredNumbTest() {
-    //     assertNull(memAcred.getAccredNumb());
+    // assertNull(memAcred.getAccredNumb());
     // }
 
     @BeforeEach
-    public void setUp() throws NotValidAccredNumberException, NullAccredNumberException, NullNifException, NotValidNifException {
+    public void setUp()
+            throws NotValidAccredNumberException, NullAccredNumberException, NullNifException, NotValidNifException {
         Nif nif = new Nif("12345678A");
         AccredNumb acreedNumb = new AccredNumb("123456781");
         memAcred = new MemberAccreditationDoc(nif, acreedNumb);
     }
 
-    //TODO OJO DESCOMENTAR IMPORTANTE!!!!
+    @Test
+    public void getNifTest() {
+        assertEquals("12345678A", memAcred.getNif());
+        // TODO Falla
+    }
 
-    // @Test
-    // public void getNifTest() {
-    //     assertEquals("12345678A", memAcred.getNif());
-    //     // TODO Falla
-    // }
+    @Test
+    public void getAcredNumbTest() {
 
-    // @Test
-    // public void getAcredNumbTest() {
-
-    //     assertEquals("123456781", memAcred.getAccredNumb());
-    //     // TODO Falla
-    // }
+        assertEquals("123456781", memAcred.getAccredNumb());
+        // TODO Falla
+    }
 }

@@ -71,12 +71,13 @@ public class PDFDocument { // Represents a PDF document
         if (destPath == null) {
             throw new NullPathException();
         }
-        File from = new File(this.file.getPath());
+        // File from = new File(this.file.getPath());
         File to = new File(destPath.getPath());
         try {
-            Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(file.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
             System.out.println("File moved successfully.");
         } catch (IOException ex) {
+            System.out.println(ex);
             throw new BadPathException();
         }
         this.path = destPath;
@@ -90,7 +91,7 @@ public class PDFDocument { // Represents a PDF document
         try {
             File filePath = new File(path.getPath());
             Desktop.getDesktop().open(filePath);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new BadPathException();
         }
     }

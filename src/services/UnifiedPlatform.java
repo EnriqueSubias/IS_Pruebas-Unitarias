@@ -230,6 +230,18 @@ public class UnifiedPlatform {
         }
     }
 
+    public void enterClavePermanente(Nif nif, Password pass, Date valDate)
+            throws IncorrectValDateException, NullValDateException, NifNotRegisteredException, NotValidCredException,
+            AnyMobileRegisteredException, ConnectException, NullPinException, NotValidPINException {
+        if (dateValid(valDate)) {
+            // if (ca.ckeckCredent(nif, pass)) {
+            byte roforzada = ca.ckeckCredent(nif, pass);
+            if (roforzada == 1) {
+                ca.sendPIN(nif, valDate);
+            }
+        }
+    }
+
     public boolean getEnterNIFandPINobtState() {
         return pinSent;
     }
