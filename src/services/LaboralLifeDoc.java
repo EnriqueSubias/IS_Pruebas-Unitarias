@@ -2,23 +2,48 @@ package src.services;
 
 import src.publicadministration.QuotePeriodsColl;
 import src.data.Nif;
+import src.exceptions.*;
 
 public class LaboralLifeDoc extends PDFDocument { // Represents the laboral life
 
     private Nif nif;
     private QuotePeriodsColl quotePds;
 
-    public LaboralLifeDoc(Nif nif, QuotePeriodsColl qtP) { // Initializes attributes
+    public LaboralLifeDoc(Nif nif, QuotePeriodsColl qtP) throws NoSuchPeriodException, NifNotRegisteredException { // Initializes
+                                                                                                                   // attributes
+        // if (nif != null) {
+        // if (qtP != null) {
+        // this.nif = nif;
+        // this.quotePds = qtP;
+        // } else {
+        // throw new NoSuchPeriodException();
+        // }
+        // } else {
+        // throw new NifNotRegisteredException();
+        // }
+
+        if (nif == null) {
+            throw new NifNotRegisteredException();
+        }
+        if (qtP == null) {
+            throw new NoSuchPeriodException();
+        }
         this.nif = nif;
         this.quotePds = qtP;
     }
 
     // the getters
-    public Nif getNif() {
+    public Nif getNif() throws NifNotRegisteredException {
+        if (this.nif == null) {
+            throw new NifNotRegisteredException();
+        }
         return this.nif;
     }
 
-    public QuotePeriodsColl getQuotePds() {
+    public QuotePeriodsColl getQuotePds() throws NoSuchPeriodException {
+        if (this.quotePds == null) {
+            throw new NoSuchPeriodException();
+        }
         return this.quotePds;
     }
 }

@@ -10,13 +10,16 @@ public interface CertificationAuthority { // External service that represents th
 
         boolean sendPIN(Nif nif, Date vaID)
                         throws NifNotRegisteredException, IncorrectValDateException, AnyMobileRegisteredException,
-                        ConnectException;
+                        ConnectException, NullPinException, NotValidPINException;
+        // proporciona las credenciales del ciudadano en el sistema Cl@ve PIN, a la vez
+        // que solicita la emisión del PIN para completar su identificación. Retorna un
+        // booleano indicando si todo es correcto.
 
         // compartida
-        public boolean checkPIN(Nif nif, PINcode pin) throws NotValidPINException, ConnectException;
+        boolean checkPIN(Nif nif, PINcode pin) throws NullPinException, ConnectException, IncorrectPinException;
 
-        public boolean ckeckCredent(Nif nif, Password passw)
+        byte ckeckCredent(Nif nif, Password passw)
                         throws NifNotRegisteredException, NotValidCredException, AnyMobileRegisteredException,
-                        ConnectException;
+                        ConnectException, NullPinException, NotValidPINException;
 
 }

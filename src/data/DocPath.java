@@ -1,6 +1,6 @@
 package src.data;
 
-import java.nio.file.Path;
+import src.exceptions.NullPathException;
 
 /**
  * Essential data classes
@@ -9,16 +9,15 @@ public final class DocPath {
     // Document Path Class.
     private String path;
 
-    public DocPath(){
+    public DocPath() {
         this.path = null;
     }
 
     // private final AccredNumb numberSS;
-    public void addDocPath(String path, AccredNumb numberSS) throws NullPointerException {
+    public void addDocPath(String path) throws NullPathException {
         if (path == null) {
-            throw new NullPointerException("path or numberSS entered as null Parameter");
+            throw new NullPathException();
         }
-        // this.numberSS=numberSS;
         this.path = path;
     }
 
@@ -27,7 +26,9 @@ public final class DocPath {
     }
 
     @Override
-    public int hashCode () { return (this.path.hashCode());}
+    public int hashCode() {
+        return (this.path.hashCode());
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -37,11 +38,6 @@ public final class DocPath {
             return false;
         }
         DocPath docPathh = (DocPath) o;
-        /*if (this.path.compareTo(DocPathh.getPath()) == 0){
-            return true;
-        }else{
-            return false;
-        }*/
         return this.path.equals(docPathh.getPath());
     }
 

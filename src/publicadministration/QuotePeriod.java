@@ -2,6 +2,11 @@ package src.publicadministration;
 
 import java.util.Date;
 
+import src.exceptions.NegativeDaysPeriod;
+import src.exceptions.NullValDateException;
+import src.exceptions.SameDateException;
+import src.exceptions.SameDaysException;
+
 public class QuotePeriod { // Represents a quote period as a registered worker
 
     private Date initDay;
@@ -12,28 +17,36 @@ public class QuotePeriod { // Represents a quote period as a registered worker
         this.numDays = ndays;
     }
 
-    public void setInitDay(Date date) {
+    public void setInitDay(Date date) throws SameDateException, NullValDateException {
         if (date == null) {
-            throw new IllegalArgumentException("Date invalid");
+            throw new NullValDateException();
         } else {
-            this.initDay = date;
+            if (!this.initDay.equals(date)) {
+                this.initDay = date;
+            } else {
+                throw new SameDateException();
+            }
         }
     }
 
-    public void setNDay(int ndays) {
+    public void setNDay(int ndays) throws NegativeDaysPeriod, SameDaysException {
         if (ndays < 0) {
-            throw new IllegalArgumentException("Date invalid");
+            throw new NegativeDaysPeriod();
         } else {
-            this.numDays = ndays;
+            if (this.numDays != ndays) {
+                this.numDays = ndays;
+            } else {
+                throw new SameDaysException();
+            }
         }
     }
 
     // the getters
-    public Date getInitDay() {
+    public Date getInitDay(){
         return this.initDay;
     }
 
-    public int getNDays() {
+    public int getNDays(){
         return this.numDays;
     }
 
@@ -41,7 +54,7 @@ public class QuotePeriod { // Represents a quote period as a registered worker
     public String toString() { // converts to String
         return "Data: " + this.initDay.toString() + " Num Days: " + this.numDays;
         // return "initDay{" + "fecha inicial='" + this.initDay.toString() + '\'' + '}'
-        // + "numDays{" + "numero de dias='" + this.numDays + '\'' + '}';
+        // + "numDays{" + "numero de dias='" + this.numDays + '\'' + '}'
     }
 
 }

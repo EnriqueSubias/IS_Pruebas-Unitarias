@@ -2,141 +2,372 @@ package src.services;
 
 import java.util.Scanner;
 
-import src.data.Nif;
-import src.data.PINcode;
+import src.data.AccredNumb;
 import src.data.DocPath;
+import src.data.Nif;
+import src.data.Password;
+import src.data.PINcode;
+
 import src.exceptions.*;
+
 import java.util.Date;
+
+import java.util.HashMap;
 
 public class UnifiedPlatform {
 
     // The class members
-    // boolean casillaSS = true;
     // Input events
-    String tramites[] = { "vida laboral", "numero seguridad social" };
-    String instituciones[] = { "SS", "AEAT", "DGT", "MJ" };
 
+    String[] tramites;
+
+    String[] persona = { "persona fisica", "persona juridica" };
+    String[] autMethod = { "Cl@ve PIN", "Cl@ve Permanente", "certificado digital" };
+
+    // Variables para indicar lo que se ha seleccionado, por defecto son null
     String institution;
     String personType;
+    String certReport;
     String report;
+    String authentication;
+    Nif nifdoc;
+    PINcode pindoc;
+    PINcode pinSMS;
+    boolean pinSent;
 
-    public void processSearcher() {
-        // se procede a utilizar el buscador de trámites. Este evento emula la acción de
+    CertificationAuthority ca;
+    SS seguridadSS;
+    MemberAccreditationDoc memberAccred;
+    AccredNumb accNumber;
+    PDFDocument pdfDoc;
+
+    HashMap<String, String> database;
+
+    public UnifiedPlatform(CertificationAuthority certAutho, SS seguridadSocial) {
+        this.ca = certAutho;
+        this.seguridadSS = seguridadSocial;
+    }
+
+    public void processSearcher() throws AnyKeyWordProcedureException {
+        // se procede a utilizar el buscador de tramites. Este evento emula la accion de
         // clicar en el buscador para desplegar el campo de texto en el que introducir
         // la o las palabras clave.
+
         System.out.println("Introduce el tramite a buscar: ");
-        Scanner sc = new Scanner(System.in); // Se crea el lector
-        String keyWord = sc.nextLine();
-        try {
+        try (Scanner sc = new Scanner(System.in)) {
+            String keyWord = sc.nextLine();
             enterKeyWords(keyWord);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            // try {
+            // enterKeyWords(keyWord);
+            // } catch (Exception ex) {
+            // ex.printStackTrace();
+            // }
         }
     }
 
     public void enterKeyWords(String keyWord) throws AnyKeyWordProcedureException {
-        // se introduce/n la/s palabra/s clave en el buscador de trámites. Obtiene la
-        // AAPP responsable de ese trámite y la muestra por pantalla.
+        // se introduce/n la/s palabra/s clave en el buscador de tramites. Obtiene la
+        // AAPP responsable de ese tramite y la muestra por pantalla.
         System.out.println("Buscando AAPP...");
-        for (int i = 0; i < tramites.length; i++) {
-            if (tramites[i].compareTo(keyWord.toLowerCase()) == 0) {
-                selectSS();
-            }
+        institution = searchKeyWords(keyWord);
+
+        if (institution.compareTo("SS") == 0) {
+            System.out.println("SS");
+            selectSS();
+        } else if (institution.compareTo("AEAT") == 0) {
+            System.out.println("AEAT");
+            // selectAEAT();
         }
-        throw new AnyKeyWordProcedureException();
+        // throw AnyKeyWordProcedureException();
     }
 
     public void selectSS() {
-        // Evento que emula la accion de clicar en la sección SS en el mosaico inicial
-        String institutionToSelect = "SS";
-        for (int i = 0; i < instituciones.length; i++) {
-            if (institutionToSelect.compareTo(instituciones[i]) == 0) {
-                institution = instituciones[i];
-                System.out.println("SS Seleccionada");
-                break;
-            }
-        }
-        selectCitizens();
+        // Evento que emula la accion de clicar en la seccion SS en el mosaico inicial.
+        institution = "SS";
+        tramites = new String[2];
+        tramites[0] = "vida laboral";
+        tramites[1] = "numero seguridad social";
+        // String institutionToSelect = "SS";
+        // for (int i = 0; i < instituciones.length; i++) {
+        // if (institutionToSelect.compareTo(instituciones[i]) == 0) {
+        // institution = instituciones[i];
+        // System.out.println("SS Seleccionada");
+        // break;
+        // }
+        // }
+    }
+
+    public void selectAEAT() {
+        institution = "AEAT";
+        tramites = new String[2];
+        tramites[0] = "obtener datos fiscales";
+        tramites[1] = "borrador de la renta";
+    }
+
+    public void selectMJ() {
+        institution = "MJ";
+        tramites = new String[1];
+        tramites[0] = "solicitar el certificado de nacimiento";
+    }
+
+    public void selectDGT() {
+        institution = "DGT";
+        tramites = new String[1];
+        tramites[0] = "puntos del carnet";
+    }
+
+    public String getInstitution() {
+        return institution;
     }
 
     public void selectCitizens() {
-        // Evento que emula la acción de clicar el enlace 'Ciudadanos', en la sección de
-        // la SS
-        String personTypeToSelect = "Ciudadanos";
-        if (institution != null) {
-            personType = personTypeToSelect;
-            System.out.println("Citizens Seleccionado");
+        // Evento que emula la accion de clicar el enlace 'Ciudadanos', en la SS
+        // String personTypeToSelect = "persona fisica";
+        if (institution != null) { // Precondiciones
+            // for (int i = 0; i < persona.length; i++) {
+            // if (persona[i].compareTo(personTypeToSelect) == 0) {
+            personType = "persona fisica";
+            // }
+            // }
+            // System.out.println("Persona fisica Seleccionado");
+        } // selectReports();
+    }
+
+    public void selectBusiness() {
+        if (institution != null) { // Precondiciones
+            personType = "persona juridica";
         }
-        selectReports();
+    }
+
+    public String getPersonType() {
+        return personType;
     }
 
     public void selectReports() {
-        // evento que emula la acción de clicar el enlace 'Informes y certificados', en
-        // el apartado 'Ciudadanos' de la SS
-        String reportToSelect = "Informes y certificados";
-        if (personType != null && personType.compareTo("Ciudadanos") == 0) {
-            report = reportToSelect;
+        // Clicar el enlace 'Informes y certificados', en 'Ciudadanos' de la SS
+        if (institution != null && institution.compareTo("SS") == 0 && personType != null
+                && personType.compareTo("persona fisica") == 0) { // Precondiciones
+            report = "informes y certificados";
         }
-        byte option = 0;
-        selectCertificationReport(option);
+
+    }
+
+    public String getReport() {
+        return report;
     }
 
     public void selectCertificationReport(byte opc) {
-        // evento que emula la acción de seleccionar el
-        // informe o certificado concreto que se desea obtener, tras presentar un menú con las
-        // dos opciones disponibles. Utilizaremos un byte para indicar de qué informe se trata.
-        if (institution != null && personType != null && personType.compareTo("Ciudadanos") == 0) {
-            // tramites[opc];
-            
-            
+        // evento que emula la accion de seleccionar el informe o certificado concreto
+        // que se desea obtener, tras presentar un menu con las dos opciones
+        // disponibles. Utilizaremos un byte para indicar de que informe se trata.
+        if (institution != null && institution.compareTo("SS") == 0 && personType != null
+                && personType.compareTo("persona fisica") == 0 && report != null
+                && report.compareTo("informes y certificados") == 0) { // Precondiciones
+            // if (opc == 0) {
+            // // pdfDoc = new LaboralLifeDoc();
+            // } else if (opc == 1) {
+            // // pdfDoc = new MemberAccreditationDoc();
+            // }
+            if (opc >= 0 && opc < tramites.length) {
+                certReport = tramites[opc];
+            }
         }
-        selectAuthMethod(opc);
+    }
+
+    public String getCertReport() {
+        return certReport;
     }
 
     public void selectAuthMethod(byte opc) {
+        if (institution != null && personType != null && report != null && certReport != null) {
+            // if (opc == 0) {
+            // // Cl@ve PIN
+            // authentication = autMethod[opc];
+            // System.out.println("Cl@ve PIN Seleccionada");
+            // } else if (opc == 1) {
+            // // certificado digital
+            // authentication = autMethod[opc];
+            // System.out.println("certificado digital Seleccionado");
+            // }
+            if (opc >= 0 && opc < autMethod.length) {
+                authentication = autMethod[opc];
+            }
+        }
+    }
+
+    public String getAuthentication() {
+        return authentication;
+    }
+
+    public void enterNIFandPINobt(Nif nif, Date valDate)
+            throws AnyMobileRegisteredException, ConnectException,
+            IncorrectValDateException, NullValDateException, NifNotRegisteredException, NullNifException,
+            NullPinException, NotValidPINException {
+        // transmetre les dades del ciutadà que l’acrediten en Cl@ve PIN,
+        // i sol·licitud del PIN per a la realització d’un tràmit,
+        // via connexió amb l’autoritat de certificació responsable
+
+        if (institution != null && personType != null && certReport != null && authentication != null
+                && authentication.equals("Cl@ve PIN")) { // Preconditions
+            if (nif == null) {
+                throw new NullNifException();
+            }
+            if (dateValid(valDate) && (ca.sendPIN(nif, valDate))) {
+                nifdoc = nif;
+                System.out.println("PIN enviado por SMS");
+                pinSent = true;
+
+            }
+        }
 
     }
 
-    public void enterNIF_PINobt(Nif nif, Date valDate) throws NifNotRegisteredException, IncorrectValDateException,
-            AnyMobileRegisteredException, ConnectException {
-
+    public void enterClavePermanente(Nif nif, Password pass, Date valDate)
+            throws IncorrectValDateException, NullValDateException, NifNotRegisteredException, NotValidCredException,
+            AnyMobileRegisteredException, ConnectException, NullPinException, NotValidPINException, NullNifException,
+            NullPasswordException {
+        if (nif == null) {
+            throw new NullNifException();
+        }
+        if (pass == null) {
+            throw new NullPasswordException();
+        }
+        if (dateValid(valDate)) {
+            // if (ca.ckeckCredent(nif, pass)) {
+            byte roforzada = ca.ckeckCredent(nif, pass);
+            if (roforzada == 1) {
+                ca.sendPIN(nif, valDate);
+                nifdoc = nif;
+                pinSent = true;
+            }
+        }
     }
 
-    public void enterPIN(PINcode pin) throws NotValidPINException, NotAffiliatedException, ConnectException {
+    public boolean getEnterNIFandPINobtState() {
+        return pinSent;
     }
 
-    private void printDocument() throws BadPathException, PrintingException {
+    public boolean dateValid(Date valDate) throws IncorrectValDateException, NullValDateException {
+        if (valDate == null) {
+            throw new NullValDateException();
+        }
+        Date currentDate = new java.util.Date();
+        if (currentDate.after(valDate)) {
+            throw new IncorrectValDateException();
+        } else {
+            return true;
+        }
     }
 
-    private void downloadDocument() {
+    public void enterPIN(PINcode pin) throws NullPointerException, NullPinException, ConnectException,
+            IncorrectPinException, NotAffiliatedException, NullNifException, NullAccredNumberException,
+            NullValDateException, NullPathException, NullFileException, BadPathException, NotValidNifException,
+            NoSuchPeriodException, NifNotRegisteredException {
+
+        if (institution != null && personType != null && certReport != null && authentication != null
+                && (authentication.equals("Cl@ve PIN") || (authentication.equals("Cl@ve Permanente"))) && pinSent) { // Preconditions
+
+            if (pin != null) {
+                if (ca.checkPIN(nifdoc, pin)) {
+                    memberAccred = seguridadSS.getMembAccred(nifdoc);
+                    if (memberAccred == null) {
+                        throw new NotAffiliatedException();
+                    } else {
+                        // System.out.println("PIN valido");
+                        obtainReportSelected();
+                    }
+                } else {
+                    throw new NullPinException();
+                }
+            } else {
+                throw new NullPinException();
+            }
+        }
     }
 
-    private void selectPath(DocPath path) throws BadPathException {
+    public void selectCertificate(byte opc) {
+        // Opcional
+    }
+
+    public void enterPassw(Password pas) throws NotValidPasswordException {
+        // Opcional
+    }
+
+    private void obtainReportSelected() throws NotAffiliatedException, BadPathException, NullPointerException,
+            ConnectException, NullPathException, NotValidNifException, NoSuchPeriodException,
+            NifNotRegisteredException {
+        if (certReport.compareTo("vida laboral") == 0) {
+            pdfDoc = seguridadSS.getLaboralLife(nifdoc);
+            DocPath defaultPath = new DocPath();
+            defaultPath.addDocPath("/tmp/laboralLife" + nifdoc.getNif());
+            pdfDoc.moveDoc(defaultPath);
+            openDocument(defaultPath);
+        }
+    }
+
+    private void printDocument() throws BadPathException, PrintingException, NullPathException {
+        // El usuario lanza la orden de imprimir el documento. No se pide su
+        // implementacion.
+        printDocument(pdfDoc.getPath());
+        System.out.println("PDF impreso");
+    }
+
+    private void downloadDocument() throws BadPathException, NullPathException {
+        // El usuario lanza la orden de descargar el documento. No se pide su
+        // implementacion.
+        downloadDocument(pdfDoc.getPath());
+        System.out.println("PDF descargado");
+    }
+
+    private void selectPath(DocPath path) throws BadPathException, NullPathException {
+        // El usuario escoge la ruta en la que guardar el documento. No se pide su
+        // implementacion.
+        pdfDoc.moveDoc(path);
+        System.out.println("Ruta seleccionada");
     }
 
     // Other operations
     private String searchKeyWords(String keyWord) throws AnyKeyWordProcedureException {
-        return new String("A");
+        if (database.containsKey(keyWord)) {
+            return database.get(keyWord);
+        } else {
+            throw new AnyKeyWordProcedureException();
+        }
     }
 
-    private void OpenDocument(DocPath path) throws BadPathException {
+    private void openDocument(DocPath path) throws BadPathException, NullPathException {
+        selectPath(path);
+        pdfDoc.openDoc(pdfDoc.getPath());
+        System.out.println("PDF abierto, ruta: " + path.toString());
     }
 
-    private void printDocument(DocPath path) throws BadPathException, PrintingException {
+    private void printDocument(DocPath path) throws BadPathException, PrintingException, NullPathException {
+        printDocument();
+        pdfDoc.toString();
+        System.out.println("PDF enviado a la impresora, ruta: " + path.toString());
     }
 
-    private void downloadDocument(DocPath path) throws BadPathException {
+    private void downloadDocument(DocPath path) throws BadPathException, NullPathException {
+        downloadDocument();
+        pdfDoc.toString();
+        System.out.println("PDF enviado para descargar a" + path.toString());
     }
+
+    public void loadDatabase(HashMap<String, String> databaseP) {
+        this.database = databaseP;
+    }
+
     // Possibly more operations
 }
 
 // Notas:
 // Es el controlador del caso de uso, tenemos que simular que todo lo del DSS se
 // haga correctamente
+
 // Mostrar mensajes por cada paso del DSS
 
 // Ojo: Un metodo de test por cada metodo NO es valido
 
 // Hay que hacer un metodo de test por cada parte relevante del caso de uso, y
-// tendran que ir en orden, para hacer un test habrá que haber hecho los
+// tendran que ir en orden, para hacer un test habra que haber hecho los
 // anteriores
