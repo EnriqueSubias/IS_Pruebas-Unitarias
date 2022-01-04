@@ -1,14 +1,11 @@
 
-package test.data;
+package test.services;
 
 import java.util.Date;
-import java.time.LocalDate;
-import java.util.Calendar;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Validate;
 
 import src.data.AccredNumb;
 import src.data.DocPath;
@@ -17,18 +14,11 @@ import src.data.Password;
 import src.data.PINcode;
 
 import src.exceptions.*;
-import src.publicadministration.*;
-import src.services.CertificationAuthority;
 import src.services.UnifiedPlatform;
-import test.services.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Scanner;
-import java.util.function.BooleanSupplier;
-
 import java.util.HashMap;
-import java.util.Map;
 
 public class UnifiedPlatformTest {
 
@@ -57,7 +47,6 @@ public class UnifiedPlatformTest {
         institutionToSelect.put("vida laboral", "SS");
         institutionToSelect.put("numero seguridad social", "SS");
         institutionToSelect.put("puntos del carnet", "DGT");
-        // institutionToSelect.put("borrador de la renta", "AEAT");
 
         uni.loadDatabase(institutionToSelect);
 
@@ -71,7 +60,6 @@ public class UnifiedPlatformTest {
     @Test
     @DisplayName("Comprobación de errores en la busqueda de tramites")
     public void keywordFailedTest() {
-
         institutionToSelect.put("vida laboral", "SS");
         institutionToSelect.put("numero seguridad social", "SS");
         uni.loadDatabase(institutionToSelect);
@@ -183,10 +171,7 @@ public class UnifiedPlatformTest {
     @Test
     @DisplayName("Comprobación del NIF y PIN de Cl@ve")
     public void enterNIFandPINobtTest()
-            throws NifNotRegisteredException, AnyMobileRegisteredException, ConnectException,
-            IncorrectValDateException, NullPinException, NotValidPINException,
-            NullValDateException, NullNifException, NotValidNifException {
-
+            throws NullNifException, NotValidNifException {
         uni.selectSS();
         uni.selectCitizens();
         uni.selectReports();
@@ -194,23 +179,25 @@ public class UnifiedPlatformTest {
         uni.selectAuthMethod((byte) 0);
 
         assertThrows(NullNifException.class, () -> uni.enterNIFandPINobt(null, null));
-
         nif = new Nif("12345678A");
+        assertThrows(NullValDateException.class, () -> uni.enterNIFandPINobt(nif, null));
         Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
-        // assertDoesNotThrow(
-        uni.enterNIFandPINobt(nif, futureDate);
-
+        Nif nif2 = new Nif("11111111A");
+        assertThrows(NifNotRegisteredException.class, () -> uni.enterNIFandPINobt(nif2, futureDate));
+        Date pastDate = Date.from((new java.util.Date()).toInstant().minusSeconds(1576800000));
+        assertThrows(IncorrectValDateException.class, () -> uni.enterNIFandPINobt(nif2, pastDate));
+        Nif nif3 = new Nif("12345678D");
+        assertThrows(AnyMobileRegisteredException.class, () -> uni.enterNIFandPINobt(nif3, futureDate));
+        assertDoesNotThrow(() -> uni.enterNIFandPINobt(nif, futureDate));
         assertTrue(uni.getEnterNIFandPINobtState());
     }
 
     @Test
     @DisplayName("Comprobación enterPin")
     public void enterPinTest()
-            throws NifNotRegisteredException, NullPinException, NotValidPINException, NotAffiliatedException,
-            ConnectException, BadPathException, AnyMobileRegisteredException, IncorrectValDateException,
-            NullValDateException, NullNifException, NullPointerException, NullPathException,
-            NotValidNifException, NullAccredNumberException, NullFileException {
-
+            throws NullPinException, NotValidPINException, NullNifException, NullPointerException,
+            NotValidNifException {
+        // Emulacion hasta llegar a enterPin
         uni.selectSS();
         uni.selectCitizens();
         uni.selectReports();
@@ -219,34 +206,40 @@ public class UnifiedPlatformTest {
 
         nif = new Nif("12345678A");
         Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
-        uni.enterNIFandPINobt(nif, futureDate);
-
+        assertDoesNotThrow(() -> uni.enterNIFandPINobt(nif, futureDate));
         PINcode pin = new PINcode("000");
-        uni.enterPIN(pin);
+        assertDoesNotThrow(() -> uni.enterPIN(pin));
+        PINcode pin2 = new PINcode("111");
+        assertThrows(NullPinException.class, () -> uni.enterPIN(null));
+        assertThrows(IncorrectPinException.class, () -> uni.enterPIN(pin2));
     }
-    /*
-     * Es conveniente añadir las excepciones que consideréis oportunas. Para el caso
-     * de la clase
-     * Nif, podemos definir las dos situaciones siguientes: que al constructor le
-     * llegue null (objeto
-     * sin instanciar), y también un nif mal formado.
-     * 
-     * ¿Cuál es el caso de las otras clases básicas? ¿Qué excepciones convendrá
-     * contemplar?
-     * 
-     */
 
-    // a.addAccredNumb("47294716742");
+    @Test
+    @DisplayName("Comprobación Con clave permanente")
+    public void clavePermanenteTest()
+            throws NullPasswordException, NotValidPasswordException, NullNifException, NotValidNifException {
+        uni.selectSS();
+        uni.selectCitizens();
+        uni.selectReports();
+        uni.selectCertificationReport((byte) 1);
+        uni.selectAuthMethod((byte) 1);
 
-    // @Test
-    // public void sendPinTest() throws NifNotRegisteredException,
-    // IncorrectValDateException, AnyMobileRegisteredException, ConnectException {
-    // Nif nifNumber = new Nif("12345678A");
-    // Date valDate = new Date(14 / 02 / 2022);
-    // // PINcode pinCodeTest = new enterNIFPINobt(nifNumber, valDate);
+        nif = new Nif("12345678A");
+        Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
+        Password pass1 = new Password("Pepito01");
 
-    // // UnifiedPlatform.enterNIFPINobt(nifNumber, valDate);
-    // }
+        assertDoesNotThrow(() -> uni.enterClavePermanente(nif, pass1, futureDate));
+        assertThrows(NullNifException.class, () -> uni.enterClavePermanente(null, pass1, futureDate));
+        assertThrows(NullPasswordException.class, () -> uni.enterClavePermanente(nif, null, futureDate));
+        assertThrows(NullValDateException.class, () -> uni.enterClavePermanente(nif, pass1, null));
+        Nif nif2 = new Nif("82345678X");
+        assertThrows(NifNotRegisteredException.class, () -> uni.enterClavePermanente(nif2, pass1, futureDate));
+        Password pass2 = new Password("Pepito02");
+        assertThrows(NotValidCredException.class, () -> uni.enterClavePermanente(nif, pass2, futureDate));
+        Nif nif3 = new Nif("12345678D");
+        assertThrows(AnyMobileRegisteredException.class, () -> uni.enterClavePermanente(nif3, pass1, futureDate));
+
+    }
 
     @Test
     @DisplayName("Comprobacion de la fecha de validez del NIF")
@@ -262,4 +255,5 @@ public class UnifiedPlatformTest {
         Date futureDate = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
         assertTrue(uni.dateValid(futureDate));
     }
+
 }

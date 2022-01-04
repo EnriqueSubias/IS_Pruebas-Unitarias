@@ -10,7 +10,6 @@ import java.util.Date;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
 import src.exceptions.*;
@@ -22,12 +21,8 @@ public class QuotePeriodTest {
 
     @BeforeAll
     public void setUp() {
-        // Calendar cal = Calendar.getInstance();
-        // cal.set(2018, Calendar.JANUARY, 10); // Year, month and day of month
-        // Date date = cal.getTime();
         Date date = Date.from((new java.util.Date()).toInstant().plusSeconds(1576800000));
         testObjetivo = new QuotePeriod(date, 10);
-        // assertDoesNotThrow(new QuotePeriod(date, 10));
     }
 
     @Test
@@ -54,10 +49,6 @@ public class QuotePeriodTest {
         cal.set(2018, Calendar.JANUARY, 10); // Year, month and day of month
         Date date = cal.getTime();
         testObjetivo = new QuotePeriod(date, 10);
-        // cal.set(2018, Calendar.JANUARY, 12);
-        // Date futureDate = cal.getTime();
-        // testObjetivo.setInitDay(futureDate);
-
         assertNotNull(testObjetivo);
         assertEquals(10, testObjetivo.getNDays());
         assertThrows(NegativeDaysPeriod.class, () -> testObjetivo.setNDay(-10));

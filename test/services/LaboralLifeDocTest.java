@@ -8,8 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import src.services.LaboralLifeDoc;
 import src.data.Nif;
@@ -22,22 +20,25 @@ public class LaboralLifeDocTest {
     LaboralLifeDoc testObjetivo;
     Nif nif;
     QuotePeriod quotePeriodo;
+    QuotePeriodsColl quotesColl;
 
-    @BeforeEach
-    public void setUp() throws AlreadyAddedException {
-        QuotePeriodsColl QuotesColl = new QuotePeriodsColl();
+    @Test
+    @DisplayName("Laboral Life Doc Test")
+    public void testLaboralLifeDoc()
+            throws NullNifException, NotValidNifException, NoSuchPeriodException, NifNotRegisteredException,
+            AlreadyAddedException {
+        quotesColl = new QuotePeriodsColl();
         Calendar cal = Calendar.getInstance();
         cal.set(2018, Calendar.JANUARY, 10); // Year, month and day of month
         Date date = cal.getTime();
         quotePeriodo = new QuotePeriod(date, 10);
-        QuotesColl.addQuotePeriod(quotePeriodo);
-    }
-
-    @Test
-    public void testLaboralLifeDoc() throws NullNifException, NotValidNifException {
+        quotesColl.addQuotePeriod(quotePeriodo);
         nif = new Nif("12345678A");
-        testObjetivo = new LaboralLifeDoc(null, null);
-        // assertThrows(NoSuchPeriodException.class, () -> testObjetivo.getQuotePds());
-        // assertThrows(NifNotRegisteredException.class, () -> testObjetivo.getNif());
+        assertThrows(NifNotRegisteredException.class, () -> new LaboralLifeDoc(null, null));
+        assertThrows(NoSuchPeriodException.class, () -> new LaboralLifeDoc(nif, null));
+        testObjetivo = new LaboralLifeDoc(nif, quotesColl);
+        assertNotNull(testObjetivo);
+        assertEquals(nif, testObjetivo.getNif());
+        assertEquals(quotesColl, testObjetivo.getQuotePds());
     }
 }

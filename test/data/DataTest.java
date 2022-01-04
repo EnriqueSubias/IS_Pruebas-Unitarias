@@ -1,13 +1,8 @@
 package test.data;
 
-import java.util.Date;
-import java.time.LocalDate;
-import java.util.Calendar;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Validate;
 
 import src.data.AccredNumb;
 import src.data.DocPath;
@@ -16,15 +11,10 @@ import src.data.Password;
 import src.data.PINcode;
 
 import src.exceptions.*;
-import src.publicadministration.*;
-import src.services.CertificationAuthority;
 import src.services.UnifiedPlatform;
 import test.services.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Scanner;
-import java.util.function.BooleanSupplier;
 
 public class DataTest {
 
@@ -47,13 +37,9 @@ public class DataTest {
     @Test
     @DisplayName("Comprobación del docPath")
     public void addPathTest() {
-        // this.docPath= new docPath();
         assertThrows(NullPathException.class, () -> this.docPath.addDocPath(null));
-        // assertThrows(NotValidPathException.class, () -> this.accredNumb = new
-        // AccredNumb("Th1sIsN0tAP4th"));
         assertDoesNotThrow(() -> docPath.addDocPath("/doc/vida_laboral.pdf"));
         assertEquals("/doc/vida_laboral.pdf", docPath.getPath());
-        // TODO
     }
 
     @Test
@@ -61,10 +47,8 @@ public class DataTest {
     public void addValidAccredNumbTest() throws NotValidAccredNumberException {
         assertThrows(NullAccredNumberException.class, () -> this.accredNumb = new AccredNumb(null));
         assertThrows(NotValidAccredNumberException.class, () -> this.accredNumb = new AccredNumb("651348562651"));
-
         assertDoesNotThrow(() -> this.accredNumb = new AccredNumb("75634816211"));
         assertEquals("75634816211", accredNumb.getAccredNumber());
-        // TODO
     }
 
     @Test
@@ -74,7 +58,6 @@ public class DataTest {
         assertThrows(NotValidNifException.class, () -> this.nif = new Nif("7654321Z"));
         assertDoesNotThrow(() -> this.nif = new Nif("12345678A"));
         assertEquals("12345678A", this.nif.getNif());
-        // TODO
     }
 
     @Test
@@ -102,8 +85,6 @@ public class DataTest {
         assertThrows(NotValidAccredNumberException.class, () -> new AccredNumb("length_is_not_11"));
         assertThrows(NotValidAccredNumberException.class, () -> new AccredNumb("11111111|11"));
         assertThrows(NotValidAccredNumberException.class, () -> new AccredNumb("").getAccredNumber());
-        // assertDoesNotThrow(NotValidAccredNumberException.class, () -> new
-        // AccredNumb("11111111111").getAccredNumber());
     }
 
 }

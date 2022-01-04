@@ -22,8 +22,8 @@ public class PDFDocumentTest {
 
     @Test
     @DisplayName("PdfDocument Creattion test")
-    public void pdfDocumentCreationTest() throws NullValDateException, NullPathException, NullFileException {
-        Date creatDate;
+    public void pdfDocumentCreationTest() {
+        // Date creatDate;
         DocPath path;
         File file;
         // Date createDate = new Date();
@@ -63,11 +63,10 @@ public class PDFDocumentTest {
 
     @Test
     @DisplayName("moveDoc Test PDFDocument")
-    public void moveDocTest() throws BadPathException, NullPathException, NullValDateException, NullFileException {
+    public void moveDocTest() throws NullPathException, NullValDateException, NullFileException {
         Date createDate = new Date();
         DocPath destPath = new DocPath();
         destPath.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/a.txt");
-        // File file = new File("/test/services/a.txt");
         File file = new File("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/services/a.txt");
 
         this.pdfDoc = new PDFDocument(createDate, destPath, file);
@@ -85,7 +84,7 @@ public class PDFDocumentTest {
 
     @Test
     @DisplayName("openDoc Test PDFDocument")
-    public void openDocTest() throws BadPathException, NullPathException, NullValDateException, NullFileException {
+    public void openDocTest() throws NullPathException, NullValDateException, NullFileException {
         Date createDate = new Date();
         DocPath path = new DocPath();
         path.addDocPath("/Users/enriquesubias/Documents/GitHub/IS_Pruebas-Unitarias/test/services/a.txt");

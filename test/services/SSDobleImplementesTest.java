@@ -26,11 +26,8 @@ public class SSDobleImplementesTest implements SS {
     @DisplayName("Comprobación de que está afiliado en la SS")
     public MemberAccreditationDoc getMembAccred(Nif nif) throws NotAffiliatedException, NullNifException,
             NullAccredNumberException, NullValDateException, NullPathException, NullFileException {
-        // TODO Auto-generated method stub
-
         if (databaseAccred.containsKey(nif)) {
-            MemberAccreditationDoc doc = new MemberAccreditationDoc(nif, databaseAccred.get(nif));
-            return doc;
+            return new MemberAccreditationDoc(nif, databaseAccred.get(nif));
         } else {
             throw new NotAffiliatedException();
         }
@@ -38,11 +35,10 @@ public class SSDobleImplementesTest implements SS {
 
     @Override
     @DisplayName("Comprobación de la vida laboral")
-    public LaboralLifeDoc getLaboralLife(Nif nif) throws NotAffiliatedException, ConnectException {
-        // TODO Auto-generated method stub
+    public LaboralLifeDoc getLaboralLife(Nif nif)
+            throws NotAffiliatedException, ConnectException, NoSuchPeriodException, NifNotRegisteredException {
         if (databasePeriods.containsKey(nif) && databaseAccred.containsKey(nif)) {
-            LaboralLifeDoc laboralLife = new LaboralLifeDoc(nif, databasePeriods.get(nif));
-            return laboralLife;
+            return new LaboralLifeDoc(nif, databasePeriods.get(nif));
         } else {
             throw new NotAffiliatedException();
         }
@@ -68,12 +64,12 @@ public class SSDobleImplementesTest implements SS {
         cal.set(2005, Calendar.JANUARY, 7); // Year, month and day of month
         Date date2 = cal.getTime();
         cal.set(2010, Calendar.JANUARY, 26); // Year, month and day of month
-        Date date3 = cal.getTime();
+        // Date date3 = cal.getTime();
         cal.set(2021, Calendar.JANUARY, 1); // Year, month and day of month
         Date date4 = cal.getTime();
         QuotePeriod period1 = new QuotePeriod(date1, 400);
         QuotePeriod period2 = new QuotePeriod(date2, 250);
-        QuotePeriod period3 = new QuotePeriod(date3, 100);
+        // QuotePeriod period3 = new QuotePeriod(date3, 100);
         QuotePeriod period4 = new QuotePeriod(date4, 60);
         QuotePeriodsColl totalPeriods1 = new QuotePeriodsColl();
         totalPeriods1.addQuotePeriod(period2);

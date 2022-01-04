@@ -10,7 +10,7 @@ import src.data.Nif;
 
 public interface SS { // External service for Social Security Govern administration
 
-    LaboralLifeDoc getLaboralLife(Nif nif) throws NotAffiliatedException, ConnectException;
+    LaboralLifeDoc getLaboralLife(Nif nif) throws NotAffiliatedException, ConnectException, NoSuchPeriodException, NifNotRegisteredException;
 
     MemberAccreditationDoc getMembAccred(Nif nif) throws NotAffiliatedException, ConnectException, NullNifException, NullAccredNumberException, NullValDateException, NullPathException, NullFileException;
 

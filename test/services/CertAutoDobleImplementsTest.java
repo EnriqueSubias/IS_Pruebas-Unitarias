@@ -46,19 +46,17 @@ public class CertAutoDobleImplementsTest implements CertificationAuthority {
         } else {
             throw new NifNotRegisteredException();
         }
-        // return false;
     }
 
     @Override
     @DisplayName("Comprobación de que el PINcode es correcto")
-    public boolean checkPIN(Nif nif, PINcode pin) throws NullPinException, ConnectException {
+    public boolean checkPIN(Nif nif, PINcode pin) throws NullPinException, ConnectException, IncorrectPinException {
 
         if (databasePinCodes.containsKey(nif)) {
-            PINcode Objective = databasePinCodes.get(nif);
-            if (Objective.equals(pin)) {
+            if (databasePinCodes.get(nif).equals(pin)) {
                 return true;
             } else {
-                throw new NullPinException();
+                throw new IncorrectPinException();
             }
         } else {
             throw new NullPinException();
@@ -94,22 +92,27 @@ public class CertAutoDobleImplementsTest implements CertificationAuthority {
         }
     }
 
-    public void addsToDatabase() throws AlreadyAddedException, NullPasswordException, NotValidPasswordException,
+    @DisplayName("Comprobación de las credenciales")
+    public void addsToDatabase() throws NullPasswordException, NotValidPasswordException,
             IllegalArgumentException, NullNifException, NotValidNifException {
         Nif user1 = new Nif("12345678A");
         Nif user2 = new Nif("12345678B");
         Nif user3 = new Nif("12345678C");
+        Nif user4 = new Nif("12345678D");
         databaseAccredPincode.put(user1, "123456781");
         databaseAccredPincode.put(user2, "123456782");
         databaseAccredPincode.put(user3, "123456783");
+        databaseAccredPincode.put(user4, null);
         Calendar cal = Calendar.getInstance();
-        cal.set(2018, Calendar.JANUARY, 10); // Year, month and day of month
+        cal.set(2021, Calendar.JANUARY, 04); // Year, month and day of month
         Date date1 = cal.getTime();
         databaseValID.put(user1, date1);
         databaseValID.put(user2, date1);
         databaseValID.put(user3, date1);
+        databaseValID.put(user4, date1);
         Password pass1 = new Password("Pepito01");
         databaseCredencials.put(user1, pass1);
+        databaseCredencials.put(user4, pass1);
     }
 
 }

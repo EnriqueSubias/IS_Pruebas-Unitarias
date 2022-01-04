@@ -1,21 +1,14 @@
 package test.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.accessibility.AccessibleRelation;
-import javax.print.attribute.DocAttribute;
-
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 
 import src.data.AccredNumb;
 import src.data.DocPath;
@@ -23,8 +16,6 @@ import src.data.Nif;
 import src.exceptions.*;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 
 import src.services.MemberAccreditationDoc;
 
@@ -32,17 +23,6 @@ public class MemberAcreditationDocTest {
 
     MemberAccreditationDoc memAcred;
 
-    // // TODO falta comprobar test
-    // @Test
-    // public void getNullNifTest() {
-    // assertNull(memAcred.getNif());
-    // }
-
-    // // TODO falta comprobar test
-    // @Test
-    // public void getNullAcredNumbTest() {
-    // assertNull(memAcred.getAccredNumb());
-    // }
     Date creatDate;
     DocPath path;
     File file;
@@ -52,7 +32,7 @@ public class MemberAcreditationDocTest {
     @BeforeEach
     public void setUp()
             throws NotValidAccredNumberException, NullAccredNumberException, NullNifException, NotValidNifException,
-            NullPathException, NullValDateException, NullFileException {
+            NullPathException {
         Calendar cal = Calendar.getInstance();
         cal.set(2018, Calendar.JANUARY, 10); // Year, month and day of month
         creatDate = cal.getTime();
@@ -79,8 +59,7 @@ public class MemberAcreditationDocTest {
 
     @Test
     public void getNifTest() throws NifNotRegisteredException, NullNifException, NullAccredNumberException,
-            NullValDateException, NullPathException, NullFileException, NotValidNifException,
-            NotValidAccredNumberException {
+            NotValidNifException, NotValidAccredNumberException {
         nif = new Nif("12345678A");
         nAff = new AccredNumb("12345678911");
         memAcred = new MemberAccreditationDoc(nif, nAff);
@@ -91,7 +70,7 @@ public class MemberAcreditationDocTest {
 
     @Test
     public void getAcredNumbTest() throws NotValidAccredNumberException, NullNifException, NotValidNifException,
-            NullAccredNumberException, NullValDateException, NullPathException, NullFileException {
+            NullAccredNumberException {
 
         nif = new Nif("12345678A");
         nAff = new AccredNumb("12345678911");

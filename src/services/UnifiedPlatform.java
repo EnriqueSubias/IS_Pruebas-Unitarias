@@ -19,8 +19,7 @@ public class UnifiedPlatform {
     // The class members
     // Input events
 
-    String[] instituciones = { "SS", "AEAT", "DGT", "MJ" };
-    String[] tramites;// ={ "vida laboral", "numero seguridad social" };
+    String[] tramites;
 
     String[] persona = { "persona fisica", "persona juridica" };
     String[] autMethod = { "Cl@ve PIN", "Cl@ve Permanente", "certificado digital" };
@@ -44,9 +43,9 @@ public class UnifiedPlatform {
 
     HashMap<String, String> database;
 
-    public UnifiedPlatform(CertificationAuthority CertAutho, SS SeguridadSocial) {
-        this.ca = CertAutho;
-        this.seguridadSS = SeguridadSocial;
+    public UnifiedPlatform(CertificationAuthority certAutho, SS seguridadSocial) {
+        this.ca = certAutho;
+        this.seguridadSS = seguridadSocial;
     }
 
     public void processSearcher() throws AnyKeyWordProcedureException {
@@ -121,10 +120,6 @@ public class UnifiedPlatform {
         return institution;
     }
 
-    // public String[] getTramites() {
-    // return tramites;
-    // }
-
     public void selectCitizens() {
         // Evento que emula la accion de clicar el enlace 'Ciudadanos', en la SS
         // String personTypeToSelect = "persona fisica";
@@ -150,13 +145,11 @@ public class UnifiedPlatform {
 
     public void selectReports() {
         // Clicar el enlace 'Informes y certificados', en 'Ciudadanos' de la SS
-        // String reportToSelect = "Informes y certificados";
         if (institution != null && institution.compareTo("SS") == 0 && personType != null
                 && personType.compareTo("persona fisica") == 0) { // Precondiciones
             report = "informes y certificados";
         }
-        // byte option = 0;
-        // selectCertificationReport(option);
+
     }
 
     public String getReport() {
@@ -167,7 +160,6 @@ public class UnifiedPlatform {
         // evento que emula la accion de seleccionar el informe o certificado concreto
         // que se desea obtener, tras presentar un menu con las dos opciones
         // disponibles. Utilizaremos un byte para indicar de que informe se trata.
-
         if (institution != null && institution.compareTo("SS") == 0 && personType != null
                 && personType.compareTo("persona fisica") == 0 && report != null
                 && report.compareTo("informes y certificados") == 0) { // Precondiciones
@@ -220,24 +212,33 @@ public class UnifiedPlatform {
             if (nif == null) {
                 throw new NullNifException();
             }
-            if (dateValid(valDate)) {
-                if (ca.sendPIN(nif, valDate)) {
-                    nifdoc = nif;
-                    System.out.println("PIN enviado por SMS");
-                    pinSent = true;
-                }
+            if (dateValid(valDate) && (ca.sendPIN(nif, valDate))) {
+                nifdoc = nif;
+                System.out.println("PIN enviado por SMS");
+                pinSent = true;
+
             }
         }
+
     }
 
     public void enterClavePermanente(Nif nif, Password pass, Date valDate)
             throws IncorrectValDateException, NullValDateException, NifNotRegisteredException, NotValidCredException,
-            AnyMobileRegisteredException, ConnectException, NullPinException, NotValidPINException {
+            AnyMobileRegisteredException, ConnectException, NullPinException, NotValidPINException, NullNifException,
+            NullPasswordException {
+        if (nif == null) {
+            throw new NullNifException();
+        }
+        if (pass == null) {
+            throw new NullPasswordException();
+        }
         if (dateValid(valDate)) {
             // if (ca.ckeckCredent(nif, pass)) {
             byte roforzada = ca.ckeckCredent(nif, pass);
             if (roforzada == 1) {
                 ca.sendPIN(nif, valDate);
+                nifdoc = nif;
+                pinSent = true;
             }
         }
     }
@@ -258,27 +259,25 @@ public class UnifiedPlatform {
         }
     }
 
-    public void enterPIN(PINcode pin)
-            throws NotValidNifException, NullPinException, NotAffiliatedException, ConnectException,
-            BadPathException, NullPointerException, NullPathException, NullNifException, NullAccredNumberException,
-            NullValDateException, NullFileException {
-        // el usuario introduce el PIN recibido via SMS, con objeto de completar su
-        // identificacion. Esta operacion se aplica siempre en el proceso de
-        // identificacion con Cl@ve PIN, pero tambien en los casos en los que se escoge
-        // Cl@ve permanente y el usuario tiene activado el metodo reforzado.
+    public void enterPIN(PINcode pin) throws NullPointerException, NullPinException, ConnectException,
+            IncorrectPinException, NotAffiliatedException, NullNifException, NullAccredNumberException,
+            NullValDateException, NullPathException, NullFileException, BadPathException, NotValidNifException,
+            NoSuchPeriodException, NifNotRegisteredException {
 
         if (institution != null && personType != null && certReport != null && authentication != null
                 && (authentication.equals("Cl@ve PIN") || (authentication.equals("Cl@ve Permanente"))) && pinSent) { // Preconditions
 
-            // this.pindoc = new PINcode(pin.getPin());
-            // this.MA = MemberAccreditationDoc(seguridadSS.getMembAccred(nifdoc)) {
-            if (ca.checkPIN(nifdoc, pin)) {
-                memberAccred = seguridadSS.getMembAccred(nifdoc);
-                if (memberAccred == null) {
-                    throw new NotAffiliatedException();
+            if (pin != null) {
+                if (ca.checkPIN(nifdoc, pin)) {
+                    memberAccred = seguridadSS.getMembAccred(nifdoc);
+                    if (memberAccred == null) {
+                        throw new NotAffiliatedException();
+                    } else {
+                        // System.out.println("PIN valido");
+                        obtainReportSelected();
+                    }
                 } else {
-                    // System.out.println("PIN valido");
-                    obtainReportSelected();
+                    throw new NullPinException();
                 }
             } else {
                 throw new NullPinException();
@@ -287,21 +286,22 @@ public class UnifiedPlatform {
     }
 
     public void selectCertificate(byte opc) {
-        // TODO Opcional
+        // Opcional
     }
 
     public void enterPassw(Password pas) throws NotValidPasswordException {
-        // TODO Opcional
+        // Opcional
     }
 
     private void obtainReportSelected() throws NotAffiliatedException, BadPathException, NullPointerException,
-            ConnectException, NullPathException, NotValidNifException {
+            ConnectException, NullPathException, NotValidNifException, NoSuchPeriodException,
+            NifNotRegisteredException {
         if (certReport.compareTo("vida laboral") == 0) {
             pdfDoc = seguridadSS.getLaboralLife(nifdoc);
             DocPath defaultPath = new DocPath();
             defaultPath.addDocPath("/tmp/laboralLife" + nifdoc.getNif());
             pdfDoc.moveDoc(defaultPath);
-            OpenDocument(defaultPath);
+            openDocument(defaultPath);
         }
     }
 
@@ -329,30 +329,31 @@ public class UnifiedPlatform {
     // Other operations
     private String searchKeyWords(String keyWord) throws AnyKeyWordProcedureException {
         if (database.containsKey(keyWord)) {
-            String aux = database.get(keyWord);
-            return aux;
+            return database.get(keyWord);
         } else {
             throw new AnyKeyWordProcedureException();
         }
     }
 
-    private void OpenDocument(DocPath path) throws BadPathException, NullPathException {
+    private void openDocument(DocPath path) throws BadPathException, NullPathException {
+        selectPath(path);
         pdfDoc.openDoc(pdfDoc.getPath());
         System.out.println("PDF abierto, ruta: " + path.toString());
     }
 
-    private void printDocument(DocPath path) throws BadPathException, PrintingException {
+    private void printDocument(DocPath path) throws BadPathException, PrintingException, NullPathException {
+        printDocument();
         pdfDoc.toString();
         System.out.println("PDF enviado a la impresora, ruta: " + path.toString());
     }
 
-    private void downloadDocument(DocPath path) throws BadPathException {
+    private void downloadDocument(DocPath path) throws BadPathException, NullPathException {
+        downloadDocument();
         pdfDoc.toString();
         System.out.println("PDF enviado para descargar a" + path.toString());
     }
 
     public void loadDatabase(HashMap<String, String> databaseP) {
-        // TODO poner como boolean
         this.database = databaseP;
     }
 
@@ -362,6 +363,7 @@ public class UnifiedPlatform {
 // Notas:
 // Es el controlador del caso de uso, tenemos que simular que todo lo del DSS se
 // haga correctamente
+
 // Mostrar mensajes por cada paso del DSS
 
 // Ojo: Un metodo de test por cada metodo NO es valido

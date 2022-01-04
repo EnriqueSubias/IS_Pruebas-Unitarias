@@ -18,7 +18,6 @@ public final class DocPath {
         if (path == null) {
             throw new NullPathException();
         }
-        // this.numberSS=numberSS;
         this.path = path;
     }
 
@@ -39,13 +38,6 @@ public final class DocPath {
             return false;
         }
         DocPath docPathh = (DocPath) o;
-        /*
-         * if (this.path.compareTo(DocPathh.getPath()) == 0){
-         * return true;
-         * }else{
-         * return false;
-         * }
-         */
         return this.path.equals(docPathh.getPath());
     }
 

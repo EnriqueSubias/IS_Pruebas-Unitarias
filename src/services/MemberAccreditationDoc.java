@@ -7,20 +7,13 @@ import src.exceptions.NotValidAccredNumberException;
 import src.exceptions.NullAccredNumberException;
 import src.exceptions.NullNifException;
 
-import java.util.Date;
-import src.data.DocPath;
-
-import java.io.File;
-import src.exceptions.*;
-
 public class MemberAccreditationDoc extends PDFDocument { // Represents the member accreditation document
 
     private Nif nif;
     private AccredNumb nAff;
 
     public MemberAccreditationDoc(Nif nif, AccredNumb nAff) // Date creatDate, DocPath path, File file,
-            throws NullNifException, NullAccredNumberException, NullValDateException, NullPathException,
-            NullFileException { // Initializes
+            throws NullNifException, NullAccredNumberException { // Initializes
         // attributes
         // super(creatDate, path, file);
         if (nif == null) {
@@ -31,7 +24,6 @@ public class MemberAccreditationDoc extends PDFDocument { // Represents the memb
         }
         this.nif = nif;
         this.nAff = nAff;
-        // TODO intentar implementear el deep copy
     }
 
     // the getters

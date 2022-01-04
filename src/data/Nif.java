@@ -8,7 +8,7 @@ import src.exceptions.*;
 
 public final class Nif {
     // The tax identification number in the Spanish state.
-    private final String nif;
+    private final String nifNumb;
 
     public Nif(String code) throws NullNifException, NotValidNifException {
         if (code == null || "".equals(code)) {
@@ -20,12 +20,13 @@ public final class Nif {
             boolean correctFormat = true;
             for (int i = 0; i < code.length() - 1; i += 1) {
                 if (!Character.isDigit(code.charAt(i))) {
-                    i = code.length();
+                    // i = code.length();
                     correctFormat = false;
+                    break;
                 }
             }
             if (correctFormat) {
-                this.nif = code;
+                this.nifNumb = code;
             } else {
                 throw new IllegalArgumentException("Invalid NIF format");
             }
@@ -33,12 +34,10 @@ public final class Nif {
     }
 
     public String getNif() throws NotValidNifException {
-        if (this.nif != null) {
-            return this.nif;
-        } else {
-            // return null;
+        if (this.nifNumb == null) {
             throw new NotValidNifException();
         }
+        return this.nifNumb;
     }
 
     @Override
@@ -48,16 +47,16 @@ public final class Nif {
         if (o == null || getClass() != o.getClass())
             return false;
         Nif niff = (Nif) o;
-        return nif.equals(niff.nif);
+        return nifNumb.equals(niff.nifNumb);
     }
 
     @Override
     public int hashCode() {
-        return this.nif.hashCode();
+        return this.nifNumb.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Nif{" + "nif ciudadano='" + nif + '\'' + '}';
+        return "Nif{" + "nif ciudadano='" + nifNumb + '\'' + '}';
     }
 }

@@ -65,13 +65,13 @@ public class PDFDocument { // Represents a PDF document
         // To implement only optionally
     }
 
-    public void moveDoc(DocPath destPath) throws BadPathException, NullPathException { // Moves the document to the
-                                                                                       // destination path
+    public void moveDoc(DocPath destPath) throws BadPathException, NullPathException {
+        // Moves the document to the
+        // destination path
         // indicated
         if (destPath == null) {
             throw new NullPathException();
         }
-        // File from = new File(this.file.getPath());
         File to = new File(destPath.getPath());
         try {
             Files.move(file.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -83,8 +83,9 @@ public class PDFDocument { // Represents a PDF document
         this.path = destPath;
     }
 
-    public void openDoc(DocPath path) throws BadPathException, NullPathException { // Opens the document at the path
-                                                                                   // indicated
+    public void openDoc(DocPath path) throws BadPathException, NullPathException {
+        // Opens the document at the path
+        // indicated
         if (path == null) {
             throw new NullPathException();
         }
